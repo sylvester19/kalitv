@@ -26,7 +26,7 @@ This files contents are outlined below.
 
 ----------------------------------------------------*/
 /*--------------------------------------------------*/
-@import url("https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,900");
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
 
 /*Color Variables*/
 .jscroll-loading {
@@ -45,7 +45,8 @@ This files contents are outlined below.
 }
 
 body {
-  font-family: "Lato", sans-serif;
+font-family: 'Playfair Display', serif;
+
   /*Section Fix*/
 }
 
@@ -59,7 +60,8 @@ body h6 {
 }
 
 body p {
-  font-family: "Lato", sans-serif;
+font-family: 'Playfair Display', serif;
+
   line-height: 30px;
   color: #758690;
   margin: 0;
@@ -2758,7 +2760,8 @@ nav a.button-collapse i {
   height: 36px !important;
   background: #fff;
   text-transform: uppercase;
-  font-family: "Lato", sans-serif;
+font-family: 'Playfair Display', serif;
+
   font-weight: bold;
   margin-left: 2px;
 }
@@ -3983,7 +3986,8 @@ video {
   line-height: normal;
   z-index: 0;
   -webkit-tap-highlight-color: transparent;
-  font-family: "Lato", sans-serif;
+font-family: 'Playfair Display', serif;
+
   touch-action: none;
 }
 
