@@ -41,7 +41,8 @@ body {
   /*Container Prefix*/
 }
 body * {
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Playfair Display', serif;
+
 }
 body .fleft {
   float: left;
@@ -254,7 +255,8 @@ button:hover {
 .navbar .container .navbar-nav li a {
   line-height: 80px;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Playfair Display', serif;
+
   text-transform: uppercase;
   font-weight: 600;
   color: #43494e;
@@ -377,7 +379,8 @@ button:hover {
 .navbar .container .navbar-nav li.dropdown.mega-drop .mega-menu li.row_title {
   padding: 0 30px;
   font-size: 18px;
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Playfair Display', serif;
+
   font-weight: 700;
   line-height: 63px;
   text-transform: uppercase;
@@ -1837,7 +1840,8 @@ footer.row {
   color: #fff;
   font-weight: 600;
   font-size: 18px;
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Playfair Display', serif;
+
 }
 .science_technology .science_tec_row .science_img .video-content a:hover,
 .science_technology .science_tec_row .science_img .video-content a:focus {
