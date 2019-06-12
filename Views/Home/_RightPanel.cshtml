@@ -1,0 +1,35 @@
+﻿@model Kalikoe.ViewModels.HomeViewModel
+@{
+   Layout = null;
+}
+<div class="right_side_bar col">
+    <div class="right_sidebar_iner">
+      
+        <div class="popular_posts">
+            <h3 class="categories_tittle">Popular Posts</h3>
+            @if (Model.bloglistVM != null && Model.bloglistVM.Count > 0)
+            {
+                for (int i = 0; i <= Model.bloglistVM.Count - 1; i++)
+                {
+                    <div class="row valign-wrapper popular_item">
+                        <div class="col s3 p_img" style="padding-right:5px">
+                            <img src="@Model.bloglistVM[i].imagepath" alt="" class="circle responsive-img">
+                        </div>
+                        <div class="col s9 p_content">
+                            <a href="@Model.bloglistVM[i].url">@Model.bloglistVM[i].blogname</a>
+                            <span class="black_text">@Model.bloglistVM[i].blogdate</span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="trending_area">
+            <h3 class="categories_tittle">Trending</h3>
+            <ul class="collapsible trending_collaps" data-collapsible="accordion">
+                <a class="twitter-timeline" href="https://twitter.com/kalitv2020?ref_src=twsrc%5Etfw">Tweets by kalitv2020</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </ul>
+        </div>
+    </div>
+</div>

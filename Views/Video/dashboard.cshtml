@@ -1,0 +1,418 @@
+﻿@model Kalikoe.ViewModels.VideoViewModel
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    <link rel="stylesheet" href="css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+
+<section class="row recent_uploads" style="background-color:white;">
+    <div class="container" style="width:100%">
+        <div class="row col-md-12 text-center">
+            <h3>
+                Your dashboard lets you track the activity and content on this site that matters to you.
+            </h3>
+        </div>
+        @if (Request.QueryString["msg"] != null)
+        {
+            if (Request.QueryString["msg"] != "" && Request.QueryString["msg"].ToLower() == "deleted")
+            {
+                <div class="row col-md-12 text-center">
+                    <h4 style="color:red;">Successfully Deleted.</h4>
+                </div>
+            }
+        }
+        <div class="row">
+            <div class="col-md-12 post_page_uploads">
+                @if (Model.listVideosVM != null && Model.listVideosVM.Count > 0)
+                {
+                    for (int i = 0; i <= Model.listVideosVM.Count - 1; i++)
+                    {
+                        <div class="row col-md-12">
+
+                            <div class="author_details post_details">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    @if (Model.listVideosVM[i].uploadtype == "image")
+                                    {
+                                        <img src="@Model.listVideosVM[i].videourl" style="width:100%"></img>
+                                    }
+                                    else
+                                    {
+                                        <iframe class="embed-responsive-item" src="@Model.listVideosVM[i].videourl"></iframe>
+                                    }
+
+                                </div>
+                                <div class="row post_title_n_view">
+                                    <h2 class="post_title">@Model.listVideosVM[i].title</h2>
+                                </div>
+                                <div class="media bio_section">
+                                    <div class="media-body author_desc_by_author" style="width:95%;min-height:0px !important">
+                                        @Html.Raw(Model.listVideosVM[i].description)
+                                        <br />
+                                        <div class="category">
+                                            <a href="#">
+                                                <img src="images/icons/catagory.png" alt="">tags : @Model.listVideosVM[i].tags
+                                            </a>
+                                        </div>
+                                        @if (Session["userid"] != null)
+                                        {
+                                            <br />
+                                            <div class="category">
+                                                <span style="cursor:pointer;font-weight:bold;" onclick="fnSponsor('@Model.listVideosVM[i].vid')"><img style="width:32px;height:32px" src="/images/sponsor.png" alt="" /> Sponsor </span>&nbsp;
+                                                <span style="cursor:pointer;font-weight:bold;" onclick="fnDelete('@Model.listVideosVM[i].vid')"><img style="width:32px;height:32px" src="/images/delete.png" alt="" /> Delete </span>&nbsp;
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">&nbsp;</div>
+                        </div>
+                    }
+                    <script>
+                        function fnChallenge(arg1) {
+                            $('#dvChallenge').simplePopup({
+                                centerPopup: true,
+                                open: function () { },
+                                closed: function () { }
+                            });
+                        }
+                        function fnSponsor(arg1) {
+                            $('#dvSponsor').simplePopup({
+                                centerPopup: true,
+                                open: function () { },
+                                closed: function () { }
+                            });
+                            $('#hdnkali').val(arg1);
+                        }
+                        function fnRateIt(vid) {
+                            var img = $('#likeimg_' + vid).attr('src');
+                            var likespan = $('#like_' + vid).text();
+                            var likecount = parseInt(likespan);
+                            var type = "";
+                            if (img == "images/like.png") {
+                                likecount = parseInt(likespan) + 1;
+                                type = "like";
+                                img = "images/unlike.png";
+                            }
+                            else if (img == "images/unlike.png") {
+                                likecount = parseInt(likespan) - 1;
+                                type = "unlike";
+                                img = "images/like.png";
+                            }
+                            var dataToPost = {
+                                "vid": vid,
+                                "type": type
+                            };
+
+                            $.ajax(
+                                {
+                                    type: "POST",
+                                    data: JSON.stringify(dataToPost),
+                                    url: "Video/fnRateIt",
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        $('#like_' + vid).text(likecount);
+                                        $('#likeimg_' + vid).attr('src', img)
+                                    }
+                                });
+                        }
+
+                        function fnnext() {
+                            var hdnvalue = parseInt($("#hdnslide").val()) + 1;
+                            $("#hdnslide").val(hdnvalue)
+                            $("#imgslide").attr("src", "images/slide" + hdnvalue + ".png");
+
+                            if (hdnvalue == 2) {
+                                $('#spSlideText').html('<strong>Earn cryptocurrency</strong><br>Kali-TV rewards you for earning points and gaining verified views on your content.');
+                            }
+                            else if (hdnvalue == 3) {
+                                $('#spSlideText').html('<strong>Unlock Badges and Features</strong><br>For every milestone, a badge will be rewarded to unlock premium features.');
+                            }
+                            else if (hdnvalue == 4) {
+                                $('#spSlideText').html('<strong>Win Trophies</strong><br>Every Friday the top 10 creators on Kali-TV will be rewarded trophies and bonuses.');
+
+                            }
+                            else if (hdnvalue == 5) {
+                                $('#spSlideText').html('<strong>How to use KD’s</strong><br>Kali Dollars can be used to make challenges or sponsor a content creator and soon can be exchanged for local cash.');
+
+                            }
+                            else if (hdnvalue == 6) {
+                                $('#spSlideText').html('<strong>Open menu to see other pages</strong><br>To open the menu bar to see other pages,Please click on finish button.');
+                                $("#btnnext").html('Finish');
+                                $("#imgslide").hide();
+                            }
+                            else if (hdnvalue == 7) {
+                                window.location = "/dashboard";
+                            }
+                        }
+
+
+                    </script>
+                    <div class="row col-md-12">
+                        <div class="media-body author_desc_by_author" style="border:solid 1px #e8ebed;padding:25px 0 25px 28px;">
+                            <h5>
+                                Users will earn badges everytime they gain large amounts of followers also unlock permium services.
+                                Different badges will allow the user to be awarded lifetime discounts at selected stores and also will be mailed and award for Kali-Tv
+                            </h5>
+                        </div>
+
+
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</section> <!--Recent Upload-->
+<!--Advertise Row-->
+
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status">&nbsp;</div>
+</div>
+
+<!--jQuery, Bootstrap and other vendor JS-->
+<!--jQuery-->
+
+<!--Bootstrap JS-->
+<script src="js/bootstrap.min.js"></script>
+
+<!--Dropzone-->
+@*<script src="js/dropzone.html"></script>*@
+
+<!--jScroll-->
+<script src="js/jquery.jscroll.min.js"></script>
+
+<!--Magnific Popup-->
+<script src="js/jquery.magnific-popup.min.js"></script>
+
+<!--Bootstrap Select-->
+<script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+<!--Theme JS-->
+<script src="js/theme.js"></script>
+<style>
+    .author_details .bio_section {
+        border-right: 1px solid #e8ebed !important;
+    }
+</style>
+<script src="js/popup.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<!-- SALES Seasonal Promotions [POP UP] script -->
+<div id="demo" class="simplePopup1" style="background-color:white;">
+    <center><img class="img-responsive" id="imgslide" src="images/slide1.png" /></center>
+    <input type="hidden" id="hdnslide" value="1" />
+    <div class="row" style="float:right">
+        <button onclick="fnnext()" id="btnnext" value="Next" class="btn btn-default form-control">Next</button>
+    </div>
+    <div class="row">
+        <span id="spSlideText" style="color:#000000"><strong>Welcome to Kali-TV</strong><br>A new world for internet champions.</span>
+    </div>
+</div>
+<div id="dvChallenge" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:80%;">
+    @using (Html.BeginForm("Challenge", "Video", FormMethod.Post))
+    {
+        <div class="row">
+
+            <div class="form-body row m0">
+
+                @Html.TextBoxFor(m => m.chVM.title, new { @class = "form-control", @placeholder = "Title", @required = "true" })<br />
+                @Html.TextBoxFor(m => m.chVM.videourl, new { @class = "form-control", @placeholder = "Video Url", @required = "true" })<br />
+                <span style="font-size:12px;color:black;">(supported website:dailymotion.com,vimeo.com and youtube.com)</span><br />
+                @Html.TextAreaFor(m => m.chVM.description, new { @class = "form-control", @placeholder = "Description", @required = "true", @cols = "40", @rows = "5" })            <br />
+                @Html.TextBoxFor(m => m.chVM.tags, new { @class = "form-control", @placeholder = "Tags", @required = "true" })<br />
+                <select name="access" class="form-control" style="width:200px">
+                    <option value="1">Logged in users</option>
+                    <option value="2">All users</option>
+                </select><br />
+                @Html.TextBoxFor(m => m.chVM.bidamount, new { @class = "form-control", @placeholder = "Kali $?", @required = "true" })<br />
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" placeholder="Time to challenge?" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <br />
+                <input type="submit" value="Upload" class="btn btn-default form-control">
+            </div>
+
+        </div>
+    }
+</div>
+
+<div id="dvSponsor" class="simplePopup1" style="background-color:white;left:0px !important;text-align:center;color:black !important;height:55%;">
+    @using (Html.BeginForm("Sponsor", "Video", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="form-body row m0">
+                <b>Sponsor Amount</b><br /><br />
+                <div style="padding-left:25%;">
+                    <select id="ddlSponsor" name="hdnkaliamt" class="form-control" required style="width:68% !important">
+                        <option value="">Select</option>
+                        <option value="1">1 Kali dollar (5 mins)</option>
+                        <option value="2">2 Kali dollars (10 mins)</option>
+                        <option value="3">3 Kali dollars (20 mins)</option>
+                    </select>
+                </div>
+                <input type="hidden" id="hdnkali" name="hdnkali" />
+                <br /><br />
+                <input type="submit" value="Submit" style="width:50% !important" class="btn btn-default form-control">
+            </div>
+        </div>
+    }
+</div>
+
+<!-- End of SALES Seasonal Promotions [POP UP] -->
+
+<style>
+    .load-full-screen {
+        margin-top: -11px;
+    }
+
+    .simplePopup {
+        display: none;
+        position: fixed !important;
+        z-index: 3;
+        color: #fff;
+        padding: 8px;
+        width: 30%;
+        min-width: 30%;
+        padding: 3%;
+    }
+
+    .simplePopup1 {
+        display: none;
+        position: fixed !important;
+        z-index: 3;
+        color: #fff;
+        width: 35%;
+        min-width: 35%;
+        padding: 2%;
+        top: 5% !important;
+       
+    }
+
+    .simplePopupClose {
+        float: right;
+        font-weight: bold;
+    }
+
+    .simplePopupBackground {
+        display: none;
+        background: #000;
+        position: fixed !important;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+</style>
+<script>
+         $(document).ready(function () {
+            var popval = '@ViewBag.showslide';
+            if (popval == "Yes") {
+                $.removeCookie('kalikoepop', { path: '/' });
+            }
+            if ($.cookie('kalikoepop') == null) {
+                $.cookie('kalikoepop', 'yes', { expires: 1, path: '/' });
+
+                $('#demo').simplePopup({
+                    centerPopup: true,
+                    open: function () { },
+                    closed: function () { }
+                });
+                setTimeout(function () {
+                    $('#demo').fadeOut('fast');
+                    $(".simplePopupBackground").fadeOut("fast");
+                }, 20000);
+            }
+    });
+
+    function fnDelete(vid) {
+        var dataToPost = {
+            "vid": vid
+        };
+
+        $.ajax(
+            {
+                type: "POST",
+                data: JSON.stringify(dataToPost),
+                url: "/Video/DeleteVideos",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    window.location = "/dashboard?msg=deleted";
+                }
+            });
+    }
+</script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": {
+                    "background": "#000"
+                },
+                "button": {
+                    "background": "#670BB7"
+                }
+            },
+            "content": {
+                "href": "http://kali-tv/privacy-and-policy"
+            }
+        })
+    });
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+@*<div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;"><br />
+    <b>GET FREE KALI DOLLARS<br/>(limited time sticker)<br/>Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+    @if (Session["userid"] != null){<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+</div>*@
+<script>
+    function fnPopRefer() {
+        $('#dvPopup').simplePopup({
+            centerPopup: true,
+            open: function () { },
+            closed: function () { }
+        });
+    }
+</script>
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:20 GMT -->
+</html>

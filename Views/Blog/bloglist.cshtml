@@ -1,0 +1,242 @@
+﻿@model Kalikoe.ViewModels.BlogViewModel
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors -- Yu -->
+    @*<link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">*@
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    @*<link rel="stylesheet" href="css/responsive/responsive.css">*@
+
+
+</head>
+<body class="home">
+
+
+    <section class="row recent_uploads" style="background-color:white;">
+        <!-- Dropdown Structure -->
+        <div style="margin-top:-76px;">
+            <div class="hed_notic">Blog List</div>
+            <ul id="itemContainer" style="list-style: none; padding: 0px !important;" class="notifications_content">
+                <li>
+                    @if (Model.bloglistVM != null && Model.bloglistVM.Count > 0)
+                    {
+                        for (int i = 0; i <= Model.bloglistVM.Count - 1; i++)
+                        {
+                            <a href="@Model.bloglistVM[i].url">
+                                <div class="row" style="padding:20px 20px 0px 36px"><h3>@Model.bloglistVM[i].blogname</h3></div>
+                                <div class="media first_child">
+                                    <img src="@Model.bloglistVM[i].imagepath" alt="" style="width:50%;height:auto;"></img>
+                                    <div class="media_body">
+                                        <div class="row m0 post_data">
+                                            <div class="fleft date"><b>Category:</b> @Model.bloglistVM[i].category</div>
+                                            <div class="fleft date"><b>Published On:</b> @Model.bloglistVM[i].blogdate</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding:20px 20px 0px 36px;line-height:25px !important">@Model.bloglistVM[i].description</div>
+                                <div class="row" style="padding:0px 0px 20px 36px;line-height:25px !important;border-bottom:1px solid #e0e9ed;"><a href="@Model.bloglistVM[i].url" style="font-weight:bold;font-size:17px;">View More >></a></div>
+                            </a>
+                        }
+                    }
+                </li>
+            </ul>
+        </div>
+        <div id="holder" style="display: inline-block;float:right;"></div>
+
+    </section> <!--Recent Upload-->
+
+
+
+    <style>
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup1 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 45%;
+            min-width: 45%;
+            padding: 3%;
+            top: 20% !important;
+            border-radius: 10%;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+    
+    <link href="/css/jPages.css" rel="stylesheet" media="screen">
+
+    <script src="/js/jPages.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#holder").jPages({
+                containerID: "itemContainer",
+                perPage: 1,
+                callback: function (pages, items) {
+                    $('html').animate({ scrollTop: 0 }, 'slow');//IE, FF
+                    $('body').animate({ scrollTop: 0 }, 'slow');//chrome, don't know if safary works
+                }
+            });
+        });
+    </script>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+    <!--Bootstrap JS-->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--jScroll-->
+    <script src="js/jquery.jscroll.min.js"></script>
+
+    <!--Magnific Popup-->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+
+    <!--Bootstrap Select-->
+    <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="/js/popup.js"></script>
+    <!--Theme JS-->
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#670BB7"
+                    }
+                },
+                "content": {
+                    "href": "http://kali-tv/privacy-and-policy"
+                }
+            })
+        });
+    </script>
+    <script>
+        function fnChallenge(arg1) {
+            $('#dvChallenge').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+        function fnSponsor(arg1) {
+            $('#dvSponsor').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+            $('#hdnkali').val(arg1);
+        }
+        function fnRateIt(vid) {
+            var img = $('#likeimg_' + vid).attr('src');
+            var likespan = $('#like_' + vid).text();
+            var likecount = parseInt(likespan);
+            var type = "";
+            if (img == "images/like.png") {
+                likecount = parseInt(likespan) + 1;
+                type = "like";
+                img = "images/unlike.png";
+            }
+            else if (img == "images/unlike.png") {
+                likecount = parseInt(likespan) - 1;
+                type = "unlike";
+                img = "images/like.png";
+            }
+            var dataToPost = {
+                "vid": vid,
+                "type": type
+            };
+
+            $.ajax(
+                {
+                    type: "POST",
+                    data: JSON.stringify(dataToPost),
+                    url: "Video/fnRateIt",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        $('#like_' + vid).text(likecount);
+                        $('#likeimg_' + vid).attr('src', img)
+                    }
+                });
+        }
+    </script>
+
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <br />
+        <b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+    </div>
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+    </script>
+
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:53:39 GMT -->
+</html>

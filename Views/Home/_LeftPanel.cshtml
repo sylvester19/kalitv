@@ -1,0 +1,76 @@
+﻿@model Kalikoe.ViewModels.HomeViewModel
+@{
+
+    Layout = null;
+}
+@*<div class="left">
+    <div id="left" style="padding:15px">
+        <a href="/homepagenew"><span style="font-weight:bold;font-size:16px">All tags</span></a><br /><br />
+        @if (Model.listTagsVM != null && Model.listTagsVM.Count > 0)
+        {
+            for (int i = 0; i <= Model.listTagsVM.Count - 1; i++)
+            {
+                <a href="@Model.listTagsVM[i].tagurl" class="tag">@Model.listTagsVM[i].tagname</a><br /><br />
+            }
+        }
+    </div>
+</div>*@
+<div class="col">
+    <div class="left_side_bar">
+       
+        <div class="interests">
+            <h3 class="categories_tittle">All Tags</span></h3>
+            <ul class="tranding_select1">
+                @if (Model.listTagsVM != null && Model.listTagsVM.Count > 0)
+                {
+                    for (int i = 0; i <= Model.listTagsVM.Count - 1; i++)
+                    {
+                        <br /><li><a href="@Model.listTagsVM[i].tagurl" class=" " style="color: #496072;padding: 5px 15px;"><b>@Model.listTagsVM[i].tagname</b></a></li>
+                    }
+                }
+            </ul>
+        </div>
+
+
+        <div class="social_Sharing">
+            <h3 class="categories_tittle">Social Sharing</h3>
+            <ul class="social_icon">
+                <li>
+                    <a class="facebook" style="font-size:43px" href="https://www.facebook.com/sharer/sharer.php?u=@Request.Url.AbsoluteUri.ToString()"
+                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                       target="_blank" title="Share on Facebook">
+                        <i class="ion-social-facebook"></i>
+                    </a>
+                    <a href="#" style="font-size:43px"></a>
+                </li>
+                <li>
+                    <a style="font-size:43px" href="https://twitter.com/share?url=@Request.Url.AbsoluteUri.ToString()&via=TWITTER_HANDLE"
+                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                       target="_blank" title="Share on Twitter">
+                        <i class="ion-social-twitter"></i>
+                    </a>
+                </li>
+                <li>
+                    <a style="font-size:43px" class="googleplus" href="https://plus.google.com/share?url=@Request.Url.AbsoluteUri.ToString()"
+                       onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;"
+                       target="_blank" title="Share on Google+" class="googleplus">
+                        <i class="ion-social-googleplus"></i>
+                    </a>
+                    <a href="#" style="font-size:43px" class="googleplus"></a>
+                </li>
+                <li><a href="#" style="font-size:43px" class="tumblr"><i class="ion-social-tumblr"></i></a></li>
+
+
+            </ul>
+        </div>
+        <div class="advertis">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({
+                    google_ad_client: "ca-pub-2914715565196059",
+                    enable_page_level_ads: true
+                });
+            </script>
+        </div>
+    </div>
+</div>

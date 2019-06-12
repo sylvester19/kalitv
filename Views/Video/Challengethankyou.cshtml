@@ -1,0 +1,146 @@
+﻿@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    <link rel="stylesheet" href="css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+
+    <section class="row upload_media">
+        <div class="container">
+            <div class="row">
+                <h2 style="color:white;padding-top:120px;">Thank you.</h2>
+            </div>
+        </div>
+    </section> <!--Upload Form-->
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+    <!--Bootstrap JS-->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--jScroll-->
+    <script src="js/jquery.jscroll.min.js"></script>
+
+    <!--Magnific Popup-->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+
+    <!--Bootstrap Select-->
+    <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+    <!--Theme JS-->
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#670BB7"
+                    }
+                },
+                "content": {
+                    "href": "http://40.71.179.31/privacy-and-policy"
+                }
+            })
+        });
+    </script>
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:80%;">
+        http://40.71.179.31/signup?refer=@Session["encemailaddress"].ToString()
+    </div>
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+    </script>
+
+    <style>
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup1 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 45%;
+            min-width: 45%;
+            padding: 3%;
+            top: 20% !important;
+            border-radius: 10%;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+
+    <script src="/js/popup.js"></script>
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:53:39 GMT -->
+</html>

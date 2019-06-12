@@ -1,0 +1,642 @@
+﻿@*@model Kalikoe.ViewModels.HomeViewModel*@
+@{
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.pagetitle</title>
+    <meta name="description" content=">@ViewBag.metadesc">
+
+    <!-- Favicon -->
+    <link rel="icon" href="~images/favicon.png" type="image/x-icon" />
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Theme Styles CSS-->
+    <link rel="stylesheet" href="/css/style.css" media="all" />
+    <!-- jQuery JS -->
+    <script src="~/js/jquery-3.2.1.min.js"></script>
+    <script src="~/js/popup.js"></script>
+    <!-- Materialize JS -->
+    <script src="/js/materialize.min.js"></script>
+    <script src="/js/theme.js"></script>
+</head>
+
+<body>
+    <style>
+        .header {
+            font-size: 232%;
+            border-bottom: 2px solid #edf4f7;
+            padding-bottom: 8px;
+        }
+    </style>
+    <!-- Header_Area -->
+    <nav class="header_area">
+        <div class="custom_container">
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo"><img src="/images/logo.png" style="width:22%;height:auto;" alt=""></a>
+
+
+
+
+                <a href="/uploadvideos" class="waves-effect btn post_btn sm_post_btn modal-trigger"><i class="ion-plus"></i>Upload</a>
+                <ul class="left_menu hide-on-med-and-down">
+                    <li><a href="/">Home</a></li>
+                    <li class="user_dropdown">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown6">Videos</a>
+                        <div id="dropdown6" class="dropdown-content submenu">
+                            <div>
+                                <ul>
+                                    <li><a href="/leaderboard">Leaderboard</a></li>
+                                    @if (Session["userid"] != null)
+                                    {
+                                        <li>
+                                            <a href="/dashboard">
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                    }
+                                    <li><a href="/UploadVideos">Upload a new Video/Image</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="user_dropdown">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown7">Extras</a>
+                        <div id="dropdown7" class="dropdown-content submenu">
+                            <div>
+                                <ul>
+                                    @*<li><a href="/terms-and-conditions">Terms & conditions</a></li>
+                                        <li><a href="/privacy-policy">Privacy Policy</a></li>
+                                        <li><a href="/disclaimer">Discalimer</a></li>*@
+                                    <li><a href="/faq">FAQ</a></li>
+                                    <li><a href="/help-and-support">Help & Support</a></li>
+                                    <li><a href="/contact-us">Contact Us</a></li>
+                                    @*<li><a href="/bloglist">Blog</a></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="/bloglist">Blog</a></li>
+                    <li class="notifications search_sm">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown5"><i class="ion-ios-search"></i></a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown5" class="dropdown-content">
+                            <li class="search_from">
+                                <input placeholder="Search and enter" type="text">
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="right right_menu hide-on-med-and-down">
+
+
+                    <li class="search_min">
+                        <div class="search_from">
+                            <input placeholder="Search Here" type="text" id="searchid">
+                            <a href="#" class="search_icon" onclick="getsearch()"><i class="ion-ios-search"></i></a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/profile">
+                            <span style="width:auto !important;">
+                                @if (Session["displayname"] != null)
+                                {<span>Hi,</span> @Session["displayname"].ToString()
+                            }
+                            </span>
+                        </a>
+                    </li>
+                    <li><a href="/uploadvideos" class="waves-effect btn post_btn modal-trigger" style="margin-top:6%"><i class="ion-plus"></i><span>Upload</span></a></li>
+                    <!-- Notifications -->
+                    @if (Session["challengecount"] != null)
+                    {
+                        if (Session["challengecount"].ToString() != "0")
+                        { 
+                            <li class="notifications" style="margin-top:3%;">
+                                <a class="dropdown-button" href="/challengelist">
+                                    <i class="ion-ios-bell-outline"></i>
+                                    <b class="n-number">
+
+                                        <span>@Session["challengecount"].ToString()</span>
+                                   
+                                    </b>
+                                </a>
+                                <!-- Dropdown Structure -->
+                            </li>
+                        }
+                    }
+                   
+                        <!-- Profile -->
+                        <li class="user_dropdown">
+                            <a class="dropdown-button" href="#!" data-activates="dropdown1">
+                                @if (Session["userid"] == null)
+                                {
+                                    <img src="/images/no-profile.png" alt="" class="circle p_2" style="width:46px;height:47px">
+                                }
+                                else
+                                {
+                                    <img src="@Session["userlogo"]" alt="" class="circle p_2" style="width:46px;height:47px">
+                                }
+                            </a>
+                            <!-- Dropdown Structure -->
+                            <ul id="dropdown1" class="dropdown-content">
+                                @if (Session["userid"] == null)
+                                {
+                                    <li><a href="/login">Login</a></li>
+                                    <li><a href="/signup">Sign Up</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="/login?type=logout">Logout</a></li>
+                                    <li><a href="/profile">My Profile</a></li>
+                                    <li><a href="/challengelist">Challenge( @Session["challengecount"].ToString() )</a></li>
+                                    <li><a href="/mychallenge?type=mychallenge">My Challenge</a></li>
+                                    <li><a href="#" onclick="fnPopRefer()">Refer and Earn</a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                <ul class="side-nav" id="mobile-demo">
+                    <li class="search_min">
+                        <div class="search_from">
+                            <input placeholder="Search Here" type="text">
+                            <a href="#" class="search_icon"><i class="ion-ios-search"></i></a>
+                        </div>
+                    </li>
+                    <li><a href="index-2.html">Home</a></li>
+                    <li class="user_dropdown">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown_s0">All Pages</a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown_s0" class="dropdown-content">
+                            <li><a href="get-started.html">Get started</a></li>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="details.html">Post details</a></li>
+                            <li><a href="details-2.html">Post details 2</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="messages.html">Messages</a></li>
+                            <li><a href="requests.html">Requests</a></li>
+                            <li><a href="read-later.html">Read-Later</a></li>
+                            <li><a href="notifications.html">Notifications</a></li>
+                            <li><a href="block-list.html">Block-list</a></li>
+                            <li><a href="photos.html">Photos</a></li>
+                            <li><a href="photos-2.html">Photos v2</a></li>
+                            <li><a href="video.html">Videos</a></li>
+                            <li><a href="block-list.html">Error (404)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Shortcodes</a></li>
+                    <li><a href="#">All Elements</a></li>
+                    <!-- Follow feed -->
+                    <li class="notifications follow">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown_s1"><i class="ion-ios-person-outline"></i><b class="n-number">7</b></a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown_s1" class="dropdown-content">
+                            <li class="hed_notic">Follow feed <span><i class="ion-ios-gear-outline"></i></span></li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-9.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Dan Fisher</b> started following you.</p>
+                                            <h6>544 mutual</h6>
+                                            <div class="btn_group">
+                                                <span class="waves-effect follow_b">Follow back</span>
+                                                <span class="waves-effect">Block</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-1.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>James Richardman </b>started following you.</p>
+                                            <h6>32 mutual</h6>
+                                            <div class="btn_group">
+                                                <span class="waves-effect confirm"><i class="ion-android-done"></i></span>
+                                                <span class="waves-effect">Block</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-12.jpg" alt="" class="circle responsive-img w_img">
+                                        <div class="media_body">
+                                            <p>You are now following <b>Meryl Streep</b></p>
+                                            <h6>Check out her most recent updates.</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-2.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>James Richardman </b>started following you.</p>
+                                            <h6>90 mutual</h6>
+                                            <div class="btn_group">
+                                                <span class="waves-effect close_b"><i class="ion-android-close"></i></span>
+                                                <span class="waves-effect">Block</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-10.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Dan Fisher</b> started following you.</p>
+                                            <h6>544 mutual</h6>
+                                            <div class="btn_group">
+                                                <span class="waves-effect follow_b">Follow back</span>
+                                                <span class="waves-effect"><i class="ion-android-done"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-11.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Edgar Hoover</b> started following you.</p>
+                                            <div class="btn_group left">
+                                                <span class="waves-effect follow_b">Follow back</span>
+                                                <span class="waves-effect">Block</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><a href="requests.html" class="waves-effect chack_all_btn">Check All Follow Requests</a></li>
+                        </ul>
+                    </li>
+                    <!-- Messages -->
+                    <li class="notifications messages">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown_s2"><i class="ion-ios-chatboxes-outline"></i><b class="n-number">3</b></a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown_s2" class="dropdown-content">
+                            <li class="hed_notic">Messages <span>Mark all as read <i class="ion-ios-gear-outline"></i></span></li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-1.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <h4>Emran Khan <small>12:40pm</small></h4>
+                                            <p>Listen, I need to talk to you about this!</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-3.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <h4>Masum Rana <small>2 hours ago</small></h4>
+                                            <p>One of the best ways to make a great vacation quickly horrible is to choose the...</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media seen">
+                                        <img src="/images/profile-8.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <h4>Jakaria Khan <small>3 hours ago</small></h4>
+                                            <p>Hi</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-5.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <h4>Papia Sultana <small>2 days ago</small></h4>
+                                            <p>Hey Masum, I’m looking for you as a new actor for upcoming “Equalizer 2” movie...</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media seen">
+                                        <img src="/images/profile-7.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <h4>Samuel L. <small>5 days ago</small></h4>
+                                            <p>Hello</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><a href="messages.html" class="waves-effect chack_all_btn">Check All Messages</a></li>
+                        </ul>
+                    </li>
+                    <!-- Notifications -->
+                    <li class="notifications">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown_s3"><i class="ion-ios-bell-outline"></i><b class="n-number">5</b></a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown_s3" class="dropdown-content">
+                            <li class="hed_notic">Notifications <span>Mark all as read <i class="ion-ios-gear-outline"></i></span></li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-6.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Dan Fisher</b> submitted a new photo  to a <small>post</small> post you are following.</p>
+                                            <h6>5 Minute ago</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-7.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>James Richardman </b>downvoted your <small>answer</small> in a post.</p>
+                                            <h6>5 Minute ago</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media seen">
+                                        <img src="/images/profile-8.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Margot Robbie</b> commented on your <small>photo</small>.</p>
+                                            <h6>5 Minute ago</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media">
+                                        <img src="/images/profile-9.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Peter Parker</b> is now following you.</p>
+                                            <h6>5 Minute ago</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="media seen">
+                                        <img src="/images/profile-10.jpg" alt="" class="circle responsive-img">
+                                        <div class="media_body">
+                                            <p><b>Dan Fisher </b> submitted a new photo  to a <small>post</small> you are following.</p>
+                                            <h6>5 Minute ago</h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><a href="notifications.html" class="waves-effect chack_all_btn">Check All Notifications</a></li>
+                        </ul>
+                    </li>
+                    <!-- Profile -->
+                    <li class="user_dropdown">
+                        <a class="dropdown-button" href="#!" data-activates="dropdown_s4"><img src="/images/profile-pic.png" alt="" class="circle p_2"></a>
+                        <!-- Dropdown Structure -->
+                        <ul id="dropdown_s4" class="dropdown-content">
+                            <li><a href="profile.html"><i class="ion-person"></i>My profile</a></li>
+                            <li><a href="read-later.html"><i class="ion-android-folder-open"></i>Saved Articles</a></li>
+                            <li class="b_t"><a href="#"><i class="ion-android-notifications"></i>Notification settings</a></li>
+                            <li class="b_b"><a href="#"><i class="ion-ios-locked"></i>Change Password</a></li>
+                            <li><a href="#"><i class="ion-gear-b"></i>Settings</a></li>
+                            <li><a href="#"><i class="ion-ios-flag"></i>Privacy Policy</a></li>
+                            <li><a href="#"><i class="ion-podium"></i>FAQ</a></li>
+                            <li><a href="#"><i class="ion-power"></i>Log out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End  Header_Area -->
+    @if (Session["userid"] == null)
+    {
+    <div class="banner_area">
+        <iframe src="https://spark.adobe.com/video/tU8KVmtRvVzuy/embed" width="960" height="540" frameborder="0" allowfullscreen></iframe>
+    </div>
+    }
+    <!-- End Tranding Area -->
+    <!-- Min Container area -->
+    <section class="min_container min_pages">
+        <div class="section_row">
+            <div class="middle_section col" id="infinite_scroll">
+                <!-- Read Later -->
+                <div class="notifications read_latter">
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- left side bar -->
+            @{Html.RenderAction("_LeftPanel", "Home");}
+            <!-- Right side bar -->
+
+            @{Html.RenderAction("_RightPanel", "Home");}
+        </div>
+    </section>
+    <!-- End Min Container area -->
+    <!-- popup-->
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;visibility:hidden;">
+        <br /><b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+    </div>
+
+    <!-- Footer area -->
+    <footer class="footer_area">
+        <div class="footer_row row">
+            <div class="col l3 m6 footer_col">
+                <div class="popular_posts">
+                    <h3 class="categories_tittle">Popular Posts</h3>
+                    <div class="row valign-wrapper popular_item">
+                        <div class="col s3 p_img">
+                            <a href="#">
+                                <img src="/images/recent-post-1.jpg" alt="" class="circle responsive-img">
+                            </a>
+                        </div>
+                        <div class="col s9 p_content">
+                            <a href="#">Poster can be one of the <br> effective marketing and </a>
+                            <span class="black_text">2 days ago</span>
+                        </div>
+                    </div>
+                    <div class="row valign-wrapper popular_item">
+                        <div class="col s3 p_img">
+                            <a href="#">
+                                <img src="/images/recent-post-2.jpg" alt="" class="circle responsive-img">
+                            </a>
+                        </div>
+                        <div class="col s9 p_content">
+                            <a href="#">Color is so powerful that it can persuade, motivate, inspire</a>
+                            <span class="black_text">3 days ago</span>
+                        </div>
+                    </div>
+                    <div class="row valign-wrapper popular_item">
+                        <div class="col s3 p_img">
+                            <a href="#">
+                                <img src="/images/recent-post-3.jpg" alt="" class="circle responsive-img">
+                            </a>
+                        </div>
+                        <div class="col s9 p_content">
+                            <a href="#">What makes one logo better than another?</a>
+                            <span class="black_text">4 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col l3 m6 footer_col footer_trending">
+                <h3 class="categories_tittle">USEFULL LINKS</h3>
+                <div class="trending_area">
+                    <ul class="collapsible trending_collaps" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/terms-and-conditions">Terms & conditions</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/privacy-policy">Privacy Policy</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/disclaimer">Discalimer</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/faq">FAQ</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/help-and-support">Help & Support</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/contact-us">Contact Us</a></div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="ion-chevron-right"></i><a href="/bloglist">Blog</a></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col l3 m6 footer_col">
+              
+            </div>
+        </div>
+        <div class="copy_right">
+            <a href="" target="_blank">Kali Tv</a>
+        </div>
+    </footer>
+    <!-- End Footer area -->
+    <!-- Add post poup area -->
+    <div id="post_modal" class="add_post modal">
+        <h2>Create A New Post</h2>
+        <form class="input_group">
+            <div class="input-field">
+                <input type="text" class="validate" placeholder="Add a tittle">
+                <textarea class="textarea" placeholder="Add some description"></textarea>
+            </div>
+            <div class="upload_photo row">
+                <ul class="tabs tab_nav">
+                    <li class="tab col s6"><a href="#photo"><i class="ion-ios-camera"></i>Add Photo</a></li>
+                    <li class="tab col s6"><a class="" href="#video"><i class="ion-ios-videocam"></i>Add video</a></li>
+                </ul>
+                <div id="photo" class="col s12 tabs_content">
+                    <div class="photo_u">
+                        <img src="/images/upload.png" alt="">
+                        <h4>Select files to upload <small>or drag &amp; drop files</small></h4>
+                    </div>
+                </div>
+                <div id="video" class="col s12 tabs_content">
+                    <div class="photo_u">
+                        <img src="/images/upload.png" alt="">
+                        <h4>Select files to upload <small>or drag &amp; drop files</small></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="input-field col s12 select_option">
+                <select>
+                    <option value="" disabled selected>Choose a category</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="2">Option 2</option>
+                    <option value="2">Option 2</option>
+                </select>
+
+                <div class="chips chips-placeholder" data-index="0" data-initialized="true">
+                    <input class="input" placeholder="Enter a tag">
+                </div>
+            </div>
+            <div class="input-field add_link">
+                <input type="text" class="validate" placeholder="Add a link">
+                <span>optional</span>
+            </div>
+            <div class="yes_no">
+                <h4>Anyone can submit?</h4>
+                <div class="flipswitch"></div>
+            </div>
+            <div class="row submit_btn_area">
+                <div class="col s6">
+                    <button class="waves-effect"><i class="ion-folder"></i>Save draft</button>
+                </div>
+                <div class="col s6">
+                    <button class="waves-effect col s6"><i class="ion-eye"></i>Preview post</button>
+                </div>
+                <div class="col s12">
+                    <button class="waves-effect publish">Publish</button>
+                </div>
+            </div>
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-97408995-8"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('js', new Date());
+
+                gtag('config', 'UA-97408995-8');
+            </script>
+
+        </form>
+    </div>
+    <!-- End Add post poup area -->
+
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+        function getsearch() {
+            var x = document.getElementById("searchid").value;
+            window.location = "/homepage?searchvalue=" + x;
+
+        }
+    </script>
+    <script type="text/javascript">
+        document.getElementById("searchid").onkeypress = function (event) {
+            if (event.keyCode == 13 || event.which == 13) {
+                var x = document.getElementById("searchid").value;
+                window.location = "/homepage?searchvalue=" + x;
+            }
+        };
+    </script>
+
+</body>
+</html>

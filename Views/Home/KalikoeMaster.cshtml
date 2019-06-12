@@ -1,0 +1,236 @@
+﻿@model Kalikoe.ViewModels.HomeViewModel
+@{
+                /**/
+
+                Layout = null;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        .topnav-shadow {
+            -webkit-box-shadow: 0 8px 6px -6px #e6e3e3;
+            -moz-box-shadow: 0 8px 6px -6px #e6e3e3;
+            box-shadow: 0 8px 6px -6px #e6e3e3;
+        }
+
+        #topnav {
+            margin-left: auto;
+            margin-right: auto;
+            width: 480px;
+            padding: 0 0px 0 10px;
+            !important
+        }
+
+        #logo {
+            width: 48px;
+        }
+
+        .navbar-brand {
+            padding: 1px 15px;
+        }
+
+        .nav > li > a {
+            padding: 10px 6px;
+        }
+
+        .top {
+            padding: -1px 20px !important;
+        }
+
+        @@media only screen and (min-width: 1026px) {
+            .fade1 {
+                display: none;
+            }
+
+            .top {
+                padding: 0px 20px !important;
+            }
+        }
+        /**Main Div's**/
+        * {
+            box-sizing: border-box;
+        }
+
+        .left {
+            padding: 0px 10px 20px 10px;
+            float: left;
+            width: 20%;
+            height: 580px;
+        }
+
+        #left {
+            border: 1px #e6e3e3 solid;
+            height: auto;
+        }
+
+        .main {
+            padding: 0px 10px 20px 10px;
+            float: left;
+            border: 1px #e6e3e3 solid;
+            width: 60%;
+            height: auto;
+        }
+
+        #main {
+            height: 100%;
+            padding: 20px;
+        }
+
+        .right {
+            padding: 0px 10px 20px 10px;
+            float: left;
+            width: 20%;
+            height: 560px;
+        }
+
+        #righttop {
+            margin-bottom: 20px;
+            border: 1px #e6e3e3 solid;
+            height: 40%;
+            padding: 20px;
+        }
+
+        #rightbottom {
+            border: 1px #e6e3e3 solid;
+            height: 60%;
+        }
+
+        @@media screen and (max-width:800px) {
+            .left, .main, .right {
+                width: 100%;
+            }
+        }
+
+        /* Hover effect */
+        @@media only screen and (min-width: 1026px) {
+            .navbar-default .navbar-nav > li > a {
+                font-weight: bold;
+            }
+
+            .home,
+            .home:after,
+            .home:before {
+                transition: all .5s;
+            }
+
+                .home:focus, .home:hover {
+                    color: #555;
+                }
+
+            .home {
+                position: relative;
+                margin-top: 9.5px;
+            }
+
+                .home:after {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    width: 0%;
+                    content: '.';
+                    color: transparent;
+                    background: #35e6ae;
+                    height: 4px;
+                }
+
+                .home:hover:after {
+                    width: 100%;
+                }
+        }
+
+        /*top-nav hover click*/
+
+        .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+            background: #5aedbe;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background: #5aedbe;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid topnav-shadow">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="/images/Logo.jpg" alt="logo" id="logo" />
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <div id="topnav">
+                    <ul class="nav navbar-nav">
+                        <li class="top">
+                            <a href="#" class="home">
+                                <img src="/images/home-variation-new.png" alt="home" style="width:20px;margin-top:-3px;" /> &nbsp;&nbsp;HOME
+                            </a>
+                        </li>
+                        <li class="dropdown top">
+                            <a class="dropdown-toggle home" data-toggle="dropdown" href="#">
+                                <img src="/images/video.png" alt="video" style="width:30px" /> &nbsp;&nbsp;VIDEOS&nbsp;&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">LEADERBOARD</a></li>
+                                <li><a href="#">UPLOAD A NEW VIDEO</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown top">
+                            <a class="dropdown-toggle home" data-toggle="dropdown" href="#">
+                                <img src="/images/video.png" alt="video" style="width:16px;" /> &nbsp;&nbsp;OTHERS&nbsp;&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">TERMS AND CONDITIONS</a></li>
+                                <li><a href="#">PRIVACY POLICY</a></li>
+                                <li><a href="#">DISCLAIMER</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">HELP AND SUPPORT</a></li>
+                                <li><a href="#">CONTACT US</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="line"></div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle home" data-toggle="dropdown" href="#">
+                            <img src="/images/login.png" alt="login" style="width:16px;" /> &nbsp;&nbsp;MY ACCOUNT&nbsp;&nbsp;<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><img src="/images/notification.png" alt="notification" style="width:16px;margin-top:8px" /><span class="fade1">&nbsp;&nbsp;NOTIFICATION&nbsp;&nbsp;</span></a></li>
+                    <li><a href="#"><img src="/images/upload.png" alt="upload" style="width:35px;margin-top:8px" /><span class="fade1">&nbsp;&nbsp;UPLOAD&nbsp;&nbsp;</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @*@{
+            @Html.Partial("_LeftPanel")
+        }*@
+    @{Html.RenderAction("_LeftPanel", "Home");}
+    <div class="main">
+        <div id="main" style="height:auto;">
+            @RenderBody()
+        </div>
+    </div>
+
+    @{
+        @Html.Partial("~/Views/Home/_RightPanel.cshtml")
+    }
+</body>
+</html>

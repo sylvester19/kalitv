@@ -1,0 +1,605 @@
+﻿@model Kalikoe.ViewModels.VideoViewModel
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="/css/default/style.css">
+    <link rel="stylesheet" href="/css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="/js/html5shiv.min.js"></script>
+      <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+
+
+    <section class="row recent_uploads" style="background-color:white;">
+        <div class="row">
+            <div class="col-md-12 post_page_uploads">
+                @if (Model.videoVM != null)
+                {
+                    <div id="category" class="row col-md-12" style="width:100%">
+
+                        <div class="author_details post_details col-md-12">
+                            <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 51%;">
+                                @if (Model.videoVM.uploadtype == "image")
+                                {
+                                    <img src="@Model.videoVM.videourl" style="width:100%;height:auto;"></img>
+                                }
+                                else
+                                {
+                                    <iframe class="embed-responsive-item" src="@Model.videoVM.videourl"></iframe>
+                                }
+                            </div>
+                            <div class="row post_title_n_view" style="margin:25px 0px 20px 20px !important">
+                                <h2 class="post_title">@Model.videoVM.title</h2>
+
+                            </div>
+                            <div class="media bio_section" style="border-right:1px solid  #e8ebed;">
+                                <div class="media-body author_desc_by_author" style="width:95%;min-height:0px !important">
+                                    @Html.Raw(Model.videoVM.description)
+                                    <br />
+                                    <div class="category"><a href="#"><img src="/images/icons/catagory.png" alt="">tags : @Model.videoVM.tags</a></div>
+                                    <div class="category"><a href="#"><img src="/images/icons/catagory.png" alt="">Uploaded by : @Model.videoVM.username</a></div>
+                                    <br />
+                                    @{
+                                        var likeurl = "/images/like.png";
+                                        if (Model.videoVM.displike != "")
+                                        {
+                                            likeurl = "/images/unlike.png";
+                                        }
+                                    }
+
+                                    @if (Session["userid"] != null)
+                                    {
+                                        <div class="category">
+                                            <span style="cursor:pointer;font-weight:bold;" onclick="fnLike('@Model.videoVM.vid')"><img style="width:32px;height:32px" id="likeimg_@Model.videoVM.vid" src="@likeurl" alt=""> Like <span style="font-weight:bold;" id="like_@Model.videoVM.vid">@Model.videoVM.likes</span></span>&nbsp;
+                                            <span style="cursor:pointer;font-weight:bold;" onclick="fnRateIt('@Model.videoVM.vid')">
+                                                <img id="rateimg_@Model.videoVM.vid" alt=""><img style="width:32px;height:32px" src="/images/rating.png" alt="" /> Rate It <span style="font-weight:bold;" id="rate_@Model.videoVM.vid">
+                                                    @if (Model.videoVM.rate != "0.0")
+                                                    {<span>(</span>
+                                                        @Model.videoVM.rate
+                                                        <span>)</span>
+                                                    }
+                                                </span>
+                                            </span>&nbsp;
+                                            <span style="cursor:pointer;font-weight:bold;" onclick="fnChallenge('@Model.videoVM.vid', '@Model.videoVM.userid')"><img style="width:32px;height:32px" src="/images/challenge.jpg" alt="" /> Challenge</span>&nbsp;
+                                            <span style="cursor:pointer;font-weight:bold;" onclick="fnSponsor('@Model.videoVM.vid')"><img style="width:32px;height:32px" src="/images/sponsor.png" alt="" /> Sponsor </span>&nbsp;
+                                        </div>
+                                    }
+                                </div>
+                            </div><br />
+                            <h3 id="comment">Comments:</h3>
+                            @if (Session["userid"] != null)
+                            {
+                                using (Html.BeginForm("Comment", "Video", FormMethod.Post))
+                                {
+                                <div>
+                                    <b>Post Your Comment:</b>
+                                    <textarea id="txtComment" class="form-control" name="txtComment" cols="40" rows="5">
+                                                        
+                                                    </textarea>
+                                    <input type="hidden" name="hdnvid" value="@ViewBag.vid" />
+                                </div>
+                                <div class="row" style="text-align:center;">
+                                    <br />
+                                    <input type="submit" value="Submit" style="widows:150" class="btn btn-default form-control" />
+                                </div>
+                                }
+                            }
+                            @if (Model.commentVM != null && Model.commentVM.Count > 0)
+                            {
+                                for (int i = 0; i <= Model.commentVM.Count - 1; i++)
+                                {
+                                    <div class="media comment">
+                                        <div class="media-left"></div>
+                                        <div class="media-body">
+                                            <div class="comment_header">
+                                                <h5>
+                                                    <a href="@Model.commentVM[i].profileurl" class="author_name">@Model.commentVM[i].displayname</a>
+                                                </h5>
+                                            </div>
+                                            <p>
+                                                @Model.commentVM[i].comments
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                    <script>
+                        function fnChallenge(arg1, arg2) {
+                            $('#dvChallenge').simplePopup({
+                                centerPopup: true,
+                                open: function () { },
+                                closed: function () { }
+                            });
+                            $('#hdnvid2').val(arg1);
+                            $('#hdnuserid2').val(arg2);
+                        }
+                        function fnRateIt(arg1) {
+                            $('#dvRate').simplePopup({
+                                centerPopup: true,
+                                open: function () { },
+                                closed: function () { }
+                            });
+                        }
+                        function fnSponsor(arg1) {
+                            $('#dvSponsor').simplePopup({
+                                centerPopup: true,
+                                open: function () { },
+                                closed: function () { }
+                            });
+                            $('#hdnvid2').val(arg1);
+                            $('#hdnuserid2').val(arg2);
+                        }
+                        function fnLike(vid) {
+                            var img = $('#likeimg_' + vid).attr('src');
+                            var likespan = $('#like_' + vid).text();
+                            var likecount = parseInt(likespan);
+                            var type = "";
+                            if (img == "/images/like.png") {
+                                likecount = parseInt(likespan) + 1;
+                                type = "like";
+                                img = "/images/unlike.png";
+                            }
+                            else if (img == "/images/unlike.png") {
+                                likecount = parseInt(likespan) - 1;
+                                type = "unlike";
+                                img = "/images/like.png";
+                            }
+                            var dataToPost = {
+                                "vid": vid,
+                                "type": type
+                            };
+                            $.ajax(
+                                {
+                                    type: "POST",
+                                    data: JSON.stringify(dataToPost),
+                                    url: "/Video/fnLike",
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function (response) {
+                                        $('#like_' + vid).text(likecount);
+                                        $('#likeimg_' + vid).attr('src', img)
+
+                                    }
+                                });
+                        }
+                    </script>
+                }
+            </div>
+        </div>
+    </section> <!--Recent Upload-->
+
+
+
+    <div id="dvChallenge" class="simplePopup2" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:80%;">
+        @using (Html.BeginForm("Challenge", "Video", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+        <div class="row">
+            <div class="form-body row m0">
+                <div class="row">
+                    <b style="padding-left:2%;">Existing Videos</b> <br />
+                    <div class="col-md-6">
+                        <select id="ddlvideolist" name="ddlvideolist" class="form-control"></select>
+                    </div>
+                    <div></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Or</b><br />
+                        <b>New Video</b><br />
+                    </div>
+                </div>
+                <div style="border:1px solid #ccc;padding:1%;">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(m => m.chVM.title, new { @class = "form-control", @placeholder = "Title" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(m => m.chVM.videourl, new { @class = "form-control", @placeholder = "Video Url" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(m => m.chVM.tags, new { @class = "form-control", @placeholder = "Tags" })
+                        </div>
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" name="file1" width="200px" placeholder="Thumbnail(Optional)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.TextAreaFor(m => m.chVM.description, new { @class = "form-control", @placeholder = "Description", @cols = "40", @rows = "5" })
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(m => m.chVM.bidamount, new { @class = "form-control", @placeholder = "Kali $?", @required = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" name="challengetime" placeholder="Time to challenge?" required />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" value="" name="hdnvid2" id="hdnvid2">
+                <input type="hidden" value="" name="hdnuserid2" id="hdnuserid2">
+               
+            </div>
+            <div class="row text-center"> <input type="submit" value="Challenge" style="width:30%" class="btn btn-default form-control"></div>
+
+        </div>
+        }
+    </div>
+
+    <div id="dvSponsor" class="simplePopup1" style="background-color:white;left:0px !important;text-align:center;color:black !important;height:55%;">
+        @using (Html.BeginForm("Sponsor", "Video", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="form-body row m0">
+                    <b>Sponsor Amount</b><br /><br />
+                    <div style="padding-left:25%;">
+                        <select id="ddlSponsor" name="hdnkaliamt" class="form-control" required style="width:68% !important">
+                            <option value="">Select</option>
+                            <option value="1">1 Kali dollar (5 mins)</option>
+                            <option value="2">2 Kali dollars (10 mins)</option>
+                            <option value="3">3 Kali dollars (20 mins)</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="hdnkali" name="hdnkali" value="@ViewBag.vid" />
+                    <br /><br />
+                    <input type="submit" value="Submit" style="width:50% !important" class="btn btn-default form-control">
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="dvRate" class="simplePopup1" style="background-color:white;left:0px !important;text-align:center;color:black !important;height:55%;">
+        @using (Html.BeginForm("fnRateIt", "Video", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="form-body row m0">
+                    <b>Rating</b><br /><br />
+                    <div>
+                        <div class='rating-stars text-center'>
+                            <ul id='stars'>
+                                <li class='star' title='Poor' data-value='1'>
+                                    <i class='fa fa-star fa-fw'></i>
+                                </li>
+                                <li class='star' title='Fair' data-value='2'>
+                                    <i class='fa fa-star fa-fw'></i>
+                                </li>
+                                <li class='star' title='Good' data-value='3'>
+                                    <i class='fa fa-star fa-fw'></i>
+                                </li>
+                                <li class='star' title='Excellent' data-value='4'>
+                                    <i class='fa fa-star fa-fw'></i>
+                                </li>
+                                <li class='star' title='WOW!!!' data-value='5'>
+                                    <i class='fa fa-star fa-fw'></i>
+                                </li>
+                            </ul>
+                            <div class='success-box'>                               
+                                <div class='text-message'></div>
+                                <div class='clearfix'></div>
+                            </div>
+                        </div>
+                   
+                </div>
+                <input type="hidden" id="hdn" name="hdnvid" value="@ViewBag.vid" />
+                <input type="hidden" id="hdnrating" name="hdnrating" value="0" />
+                <input type="submit" value="Submit" style="width:50% !important" class="btn btn-default form-control">
+                </div>
+            </div>
+        }
+    </div>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+
+    <style>
+        .success-box {
+            margin: 50px 0;
+            padding: 10px 10px;
+           
+        }
+
+
+        .success-box img {
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .success-box > div {
+            vertical-align: top;
+            display: inline-block;
+            color: #888;
+        }
+        .input-group-addon {
+            background-color: #FFFFFF !important;
+            border: 1px solid #FFFFFF !important;
+        }
+        /* Rating Star Widgets Style */
+        .rating-stars ul {
+            list-style-type: none;
+            padding: 0;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .rating-stars ul > li.star {
+            display: inline-block;
+        }
+
+            /* Idle State of the stars */
+            .rating-stars ul > li.star > i.fa {
+                font-size: 2.5em; /* Change the size of the stars */
+                color: #ccc; /* Color on idle state */
+            }
+
+            /* Hover state of the stars */
+            .rating-stars ul > li.star.hover > i.fa {
+                color: #FFCC36;
+            }
+
+            /* Selected state of the stars */
+            .rating-stars ul > li.star.selected > i.fa {
+                color: #FF912C;
+            }
+
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup2 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 65% !important;
+            padding: 3%;   
+            left:17% !important;
+            top:5% !important;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    <!--Bootstrap JS-->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!--Dropzone-->
+    @*<script src="/js/dropzone.html"></script>*@
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({                sideBySide: true            });            $('#datetimepicker1').data("DateTimePicker").minDate(new Date());            $("#datetimepicker1").on("dp.change", function (e) {                var oldDate = new Date(e.date);                var date = new Date(oldDate);                //date.setHours(oldDate.getHours() + 1);                $('#datetimepicker1').data("DateTimePicker").minDate(date);            });  
+            videolist();
+            /* 1. Visualizing things on Hover - See next part for action on click */
+            $('#stars li').on('mouseover', function () {
+                var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+                // Now highlight all the stars that's not after the current hovered star
+                $(this).parent().children('li.star').each(function (e) {
+                    if (e < onStar) {
+                        $(this).addClass('hover');
+                    }
+                    else {
+                        $(this).removeClass('hover');
+                    }
+                });
+
+            }).on('mouseout', function () {
+                $(this).parent().children('li.star').each(function (e) {
+                    $(this).removeClass('hover');
+                });
+            });
+
+
+            /* 2. Action to perform on click */
+            $('#stars li').on('click', function () {
+                var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+                var stars = $(this).parent().children('li.star');
+
+                for (i = 0; i < stars.length; i++) {
+                    $(stars[i]).removeClass('selected');
+                }
+
+                for (i = 0; i < onStar; i++) {
+                    $(stars[i]).addClass('selected');
+                }
+
+                // JUST RESPONSE (Not needed)
+                var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+                var msg = "";
+                if (ratingValue > 1) {
+                    msg = "Thanks! You rated this " + ratingValue + " stars.";
+                }
+                else {
+                    msg = "You rated this " + ratingValue + " star.";
+                }
+                responseMessage(msg, ratingValue);
+
+            });
+
+        });
+        function responseMessage(msg, ratingValue) {
+            $('.success-box').fadeIn(200);
+            $('.success-box div.text-message').html("<span>" + msg + "</span>");
+            $('#hdnrating').val(ratingValue);
+        }
+    </script>
+    <!--jScroll-->
+    <script src="/js/jquery.jscroll.min.js"></script>
+    <script src="/js/popup.js"></script>
+    <!--Magnific Popup-->
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+
+    <!--Bootstrap Select-->
+    @*<script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>*@
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <!--Theme JS-->
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+
+    <script src="/js/popup.js"></script>
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <br />
+        <b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+    </div>
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+  
+      
+    </script>
+
+    <style>
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup1 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 45%;
+            min-width: 45%;
+            padding: 3%;
+            top: 20% !important;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+
+    <script>
+    
+         function videolist()
+         {                        
+            var dataToPost = {               
+            };
+            $.ajax(
+                {
+                    type: "POST",
+                    data: JSON.stringify(dataToPost),
+                    url: "/Video/UserVideoList",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (r) {
+                        var ddlvideolist = $("[id*=ddlvideolist]");
+                        for (var i = 0; i < r.length; i++) {
+                            ddlvideolist.append($("<option></option>").val(r[i].Value).html(r[i].Text));
+                        }
+
+                    }
+                });
+           }
+    </script>
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:20 GMT -->
+</html>

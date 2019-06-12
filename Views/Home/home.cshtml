@@ -1,0 +1,452 @@
+﻿@model Kalikoe.ViewModels.HomeViewModel
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors -- Yu -->
+    @*<link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/magnific-popup.css">
+        <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">*@
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    @*<link rel="stylesheet" href="css/responsive/responsive.css">*@
+
+
+</head>
+<body class="home">
+
+
+    <section class="row recent_uploads" style="background-color:white;">
+        <!-- Dropdown Structure -->
+        <div style="margin-top:-76px;">
+
+            @if (Model.strSponsor != "")
+            {
+                <div class="hed_notic">Sponsor Video</div>
+                <div class="media first_child" style="margin-left:23%;">
+                    @if (Model.strSponsor.Contains("https://www.youtu"))
+                    {
+                    <iframe autoplay="false" src="@Model.strSponsor" controls="true" alt=""></iframe>
+                    }
+                    else
+                    {
+                    <video controls="true" class="embed-responsive-item" width="304" height="154">
+                        <source src="@Model.strSponsor" />
+                    </video>
+                    }
+                </div>
+            }
+
+                    <div class="hed_notic">RECENT UPLOADS</div>
+                    <ul class="notifications_content" id="itemContainer">
+
+                        @if (Model.listVideosVM != null && Model.listVideosVM.Count > 0)
+                        {
+                            for (int i = 0; i <= Model.listVideosVM.Count - 1; i++)
+                            {
+                                <li>
+                                    <div class="media first_child">
+                                        @{
+                                            var likeurl = "/images/like.png";
+                                            if (Model.listVideosVM[i].displike != "")
+                                            {
+                                                likeurl = "/images/unlike.png";
+                                            }
+                                        }
+
+                                        @if (Model.listVideosVM[i].uploadtype == "image")
+                                        {
+                                            <img src="@Model.listVideosVM[i].videourl" style="width:304px;height:154px"></img>
+                                        }
+                                        else
+                                        {
+                                            if (Model.listVideosVM[i].videourl.Contains("https://www.youtu"))
+                                            {
+                                                <iframe autoplay="false" src="@Model.listVideosVM[i].videourl" controls="true" alt=""></iframe>
+                                            }
+                                            else
+                                            {
+                                                <video controls="true" class="embed-responsive-item" width="304" height="154">
+                                                    <source src="@Model.listVideosVM[i].videourl" />
+                                                </video>
+                                            }
+                                        }
+
+                                        <div class="media_body">
+                                            <div class="row m0 post_data">
+                                                <div class="row m0">@Model.listVideosVM[i].title<br />Published: @Model.listVideosVM[i].publishedon</div>
+                                                <div class="fleft date">
+                                                    @{
+                                                        string strDisp = "Yes";
+                                                    }
+                                                    @if (Session["userid"] != null)
+                                                    {
+                                                        if (Session["userid"].ToString() == @Model.listVideosVM[i].userid)
+                                                        {
+                                                            strDisp = "No";
+                                                        }
+                                                    }
+                                                    @if (strDisp == "Yes")
+                                                    {
+                                                        <span style="cursor:pointer;font-weight:bold;" onclick="fnLike('@Model.listVideosVM[i].vid')"><img style="width:32px;height:32px" id="likeimg_@Model.listVideosVM[i].vid" src="@likeurl" alt=""> Like <span style="font-weight:bold;" id="like_@Model.listVideosVM[i].vid">@Model.listVideosVM[i].likes</span></span><br />
+                                                        <span style="cursor:pointer;font-weight:bold;" onclick="fnChallenge('@Model.listVideosVM[i].vid', '@Model.listVideosVM[i].userid')"><img style="width:32px;height:32px" src="/images/challenge.jpg" alt="" /> Challenge</span>
+                                                    }
+                                                </div>
+                                                <div class="fright views" style="float:left;"><a href="@Model.listVideosVM[i].profileurl">@Model.listVideosVM[i].displayname</a></div><br /><br />
+                                                <div class="fright views" style="float:left;font-weight:bold;"><a href="@Model.listVideosVM[i].url">More Details >></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <div id="holder" class="holder"></div>
+
+                </div>
+</section> <!--Recent Upload-->
+
+    <div id="dvChallenge" class="simplePopup2" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:80%;">
+        @using (Html.BeginForm("Challenge", "Video", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="form-body row m0">
+                    <div class="row">
+                        <b style="padding-left:2%;">Existing Videos</b> <br />
+                        <div class="col-md-6">
+                            <select id="ddlvideolist" name="ddlvideolist" class="form-control"></select>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b>Or</b><br />
+                            <b>New Video</b><br />
+                        </div>
+                    </div>
+                    <div style="border:1px solid #ccc;padding:1%;">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(m => m.chVM.title, new { @class = "form-control", @placeholder = "Title" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(m => m.chVM.videourl, new { @class = "form-control", @placeholder = "Video Url" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(m => m.chVM.tags, new { @class = "form-control", @placeholder = "Tags" })
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" name="file1" width="200px" placeholder="Thumbnail(Optional)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.TextAreaFor(m => m.chVM.description, new { @class = "form-control", @placeholder = "Description", @cols = "40", @rows = "5" })
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(m => m.chVM.bidamount, new { @class = "form-control", @placeholder = "Kali $?", @required = "true" })
+                        </div>
+                        <div class="col-md-6">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" name="challengetime" placeholder="Time to challenge?" required />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" name="hdnvid2" id="hdnvid2">
+                    <input type="hidden" value="" name="hdnuserid2" id="hdnuserid2">
+
+                </div>
+                <div class="row text-center"> <input type="submit" value="Challenge" style="width:30%" class="btn btn-default form-control"></div>
+
+            </div>
+        }
+    </div>
+
+    <style>
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup1 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 45%;
+            min-width: 45%;
+            padding: 3%;
+            top: 20% !important;
+            border-radius: 10%;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .simplePopup2 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 65% !important;
+            padding: 3%;
+            left: 17% !important;
+            top: 5% !important;
+        }
+
+        .input-group-addon {
+            background-color: #FFFFFF !important;
+            border: 1px solid #FFFFFF !important;
+        }
+    </style>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    <!--Bootstrap JS-->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--jScroll-->
+    <script src="js/jquery.jscroll.min.js"></script>
+
+    <!--Magnific Popup-->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+
+    <!--Bootstrap Select-->
+    <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="/js/popup.js"></script>
+    <!--Theme JS-->
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#670BB7"
+                    }
+                },
+                "content": {
+                    "href": "http://kali-tv/privacy-and-policy"
+                }
+            })
+        });
+    </script>
+
+
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <br />
+        <b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+    </div>
+    <div id="dvSponsor" class="simplePopup1" style="background-color:white;left:0px !important;text-align:center;color:black !important;height:55%;">
+        @using (Html.BeginForm("Sponsor", "Video", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="form-body row m0">
+                    <b>Sponsor Amount</b><br /><br />
+                    <div style="padding-left:25%;">
+                        <select id="ddlSponsor" name="hdnkaliamt" class="form-control" required style="width:68% !important">
+                            <option value="">Select</option>
+                            <option value="1">1 Kali dollar (5 mins)</option>
+                            <option value="2">2 Kali dollars (10 mins)</option>
+                            <option value="3">3 Kali dollars (20 mins)</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="hdnkali" name="hdnkali" value="@ViewBag.vid" />
+                    <input type="hidden" id="hdnsession" name="hdnsession" value="@Session["userid"]" />
+                    <br /><br />
+                    <input type="submit" value="Submit" style="width:50% !important" class="btn btn-default form-control">
+                </div>
+            </div>
+        }
+    </div>
+
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+        function fnChallenge(arg1, arg2) {
+            var sessid = $('#hdnsession').val();
+            if (sessid == "") {
+                window.location = "/login";
+            } else {
+                $('#dvChallenge').simplePopup({
+                    centerPopup: true,
+                    open: function () { },
+                    closed: function () { }
+                });
+                $('#hdnvid2').val(arg1);
+                $('#hdnuserid2').val(arg2);
+            }
+        }
+        function fnSponsor(arg1) {
+            var sessid = $('#hdnsession').val();
+            if (sessid == "") {
+                window.location = "/login";
+            } else {
+                $('#dvSponsor').simplePopup({
+                    centerPopup: true,
+                    open: function () { },
+                    closed: function () { }
+                });
+                $('#hdnkali').val(arg1);
+            }
+
+        }
+        function fnLike(vid) {
+            var sessid = $('#hdnsession').val();
+            if (sessid == "") {
+                window.location = "/login";
+            }
+            else {
+                var img = $('#likeimg_' + vid).attr('src');
+                var likespan = $('#like_' + vid).text();
+                var likecount = parseInt(likespan);
+                var type = "";
+                if (img == "/images/like.png") {
+                    likecount = parseInt(likespan) + 1;
+                    type = "like";
+                    img = "/images/unlike.png";
+                }
+                else if (img == "/images/unlike.png") {
+                    likecount = parseInt(likespan) - 1;
+                    type = "unlike";
+                    img = "/images/like.png";
+                }
+                var dataToPost = {
+                    "vid": vid,
+                    "type": type
+                };
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        data: JSON.stringify(dataToPost),
+                        url: "/Video/fnLike",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            $('#like_' + vid).text(likecount);
+                            $('#likeimg_' + vid).attr('src', img)
+                        }, error: function (er) {
+                            window.location = "/login";
+                        }
+                    });
+            }
+        }
+    </script>
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+    <script src="/js/popup.js"></script>
+    <script>
+        function videolist() {
+            var dataToPost = {
+            };
+            $.ajax(
+                {
+                    type: "POST",
+                    data: JSON.stringify(dataToPost),
+                    url: "/Video/UserVideoList",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (r) {
+                        var ddlvideolist = $("[id*=ddlvideolist]");
+                        for (var i = 0; i < r.length; i++) {
+                            ddlvideolist.append($("<option></option>").val(r[i].Value).html(r[i].Text));
+                        }
+
+                    }
+                });
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+                      $('#datetimepicker1').datetimepicker({                sideBySide: true            });            $('#datetimepicker1').data("DateTimePicker").minDate(new Date());            $("#datetimepicker1").on("dp.change", function (e) {                var oldDate = new Date(e.date);                var date = new Date(oldDate);                //date.setHours(oldDate.getHours() + 1);                $('#datetimepicker1').data("DateTimePicker").minDate(date);            });   
+            videolist();
+        });
+    </script>
+    <link rel="stylesheet" href="/css/jPages.css">
+
+
+    <script src="/js/jPages.js"></script>
+    <script>
+        $(function () {
+            $("div.holder").jPages({
+                containerID: "itemContainer",
+                perPage: 3
+            });
+
+        });
+    </script>
+</body>
+</html >

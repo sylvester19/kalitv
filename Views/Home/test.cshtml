@@ -1,0 +1,277 @@
+﻿@model Kalikoe.ViewModels.UsersViewModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    <link rel="stylesheet" href="css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <br /><b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://40.71.179.31/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+    </div>
+
+
+    <style>
+        .load-full-screen {
+            margin-top: -11px;
+        }
+
+        .simplePopup {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 30%;
+            min-width: 30%;
+            padding: 3%;
+        }
+
+        .simplePopup1 {
+            display: none;
+            position: fixed !important;
+            z-index: 3;
+            color: #fff;
+            padding: 8px;
+            width: 45%;
+            min-width: 45%;
+            padding: 3%;
+            top: 20% !important;
+        }
+
+        .simplePopupClose {
+            float: right;
+            font-weight: bold;
+        }
+
+        .simplePopupBackground {
+            display: none;
+            background: #000;
+            position: fixed !important;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+
+    <script src="/js/popup.js"></script>
+    <section class="row" style="background-color:white;">
+
+        <div class="row media-grid content_video_posts" style="width:100%;">
+            @using (Html.BeginForm("Signup", "Home", FormMethod.Post, new { style = "width:95%;", @class = "container-fluid signup_form auth_form" }))
+            {
+                <div class="form-inner row" style="width: 90%;">
+                    <div class="form-header row m0">
+
+                        <h4>Sign up for KaliTV account</h4>
+                    </div>
+                    <div class="form-body row m0">
+                        <span id="errcaptch" style="font-weight:bold;color:red;">@ViewBag.captchamsg</span>
+                        @Html.TextBoxFor(m => m.userVM.firstname, new { @class = "form-control", @placeholder = "First Name", @required = "true" })
+                        @Html.TextBoxFor(m => m.userVM.lastname, new { @class = "form-control", @placeholder = "Last Name", @required = "true" })
+                        @Html.TextBoxFor(m => m.userVM.username, new { @class = "form-control", @placeholder = "User Name", @required = "true", @onkeyup = "usercheck();", @onmouseout = "usercheck();" })
+                        <label id="usercheck" style="color:red;font-size:13px;font-weight:bold"></label>
+                        @Html.PasswordFor(m => m.userVM.password, new { @class = "form-control", @placeholder = "Password", @required = "true" })
+                        @Html.PasswordFor(m => m.userVM.confirmpassword, new { @class = "form-control", @placeholder = "Confirm Password", @required = "true" })
+                        <label id="pwdcheck" style="color:red;font-size:13px;font-weight:bold"></label>
+                        @Html.TextBoxFor(m => m.userVM.emailaddress, new { @class = "form-control", @type = "Email", @placeholder = "Email", @required = "true", @onkeyup = "usercheck();", @onmouseout = "usercheck();" })
+                        <label id="mailcheck" style="color:red;font-size:13px;font-weight:bold"></label>
+                        @Html.TextBoxFor(m => m.userVM.mobileno, new { @class = "form-control", @placeholder = "Mobile Number", @required = "true", @id = "mobno" })
+                        <span id="errormsg" style="color:red"></span>
+                        @Html.Captcha("Refresh", "Enter the text shown in image", 7, "Is required field.", false)
+                        <input type="checkbox" id="chkterm" name="ckterm" style="opacity:1; pointer-events: auto !important;" /> <span style="margin-left:25px">I agree to the terms and conditions</span><br />
+                        <label id="checkboxvalid" style="color:red;font-size:14px;font-weight:bold"></label><br />
+                        <input type="checkbox" id="chkpromotion" name="cktermPrmo" style="opacity:1; pointer-events: auto !important;" /> <span style="margin-left:25px">I agree to receive promotional and offer emails.</span>
+
+                        <input type="submit" value="Create My Account" class="btn btn-default form-control" onclick="return Validate()"><br />
+                    </div>
+
+                </div>
+            }
+        </div>
+
+    </section>
+
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    @*<script src="js/jquery-3.2.1.min.js"></script>*@
+
+    <!--Bootstrap JS-->
+    @*<script src="js/bootstrap.min.js"></script>*@
+
+    <!--jScroll-->
+    <script src="js/jquery.jscroll.min.js"></script>
+
+    <!--Magnific Popup-->
+    @*<script src="js/jquery.magnific-popup.min.js"></script>*@
+
+    <!--Bootstrap Select-->
+    <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+    <!--Theme JS-->
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#670BB7"
+                    }
+                },
+                "content": {
+                    "href": "http://40.71.179.31/privacy-and-policy"
+                }
+            })
+        });
+    </script>
+    <script>
+        function fnPopRefer() {
+            $('#dvPopup').simplePopup({
+                centerPopup: true,
+                open: function () { },
+                closed: function () { }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        function Validate() {
+            var password = document.getElementById("userVM_password").value;
+            var confirmPassword = document.getElementById("userVM_confirmpassword").value;
+            if (password != confirmPassword) {
+                document.getElementById("pwdcheck").innerText = "Password mismatch"
+
+                return false;
+            }
+            //alert(!$('#chkterm').prop("checked") == false)
+            if ($('#chkterm').prop("checked") == false) {
+                document.getElementById("checkboxvalid").innerText = "Please Check the Terms & Conditions";
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <script type="text/javascript">
+        function usercheck() {
+            var us = document.getElementById("userVM_username").value;
+            var ma = document.getElementById("userVM_emailaddress").value;
+            var dataToPost = {
+                "username": us,
+                "emailaddress": ma
+            };
+
+            $.ajax(
+                {
+                    type: "POST",
+                    data: JSON.stringify(dataToPost),
+                    url: "/Home/User_Check",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        //  alert(response);
+                        if (response == 1) {
+                            $('#usercheck').text('UserName already exist');
+                        } else {
+                            $('#usercheck').text('');
+                        }
+                        if (response == 2) {
+                            $('#mailcheck').text('Email-ID already exist');
+                        }
+                        else {
+                            $('#mailcheck').text('');
+                        }
+                    }
+                });
+            $(document).ready(function () {
+                $("#mobno").keypress(function (e) {
+                    if (e.which != 8 && e.which != 0 && (e.which < 32 || e.which > 57)) {
+                        $("#errormsg").html("Digits Only").show().fadeOut("slow");
+                        return false;
+                    }
+                });
+            });
+
+        }
+    </script>
+
+    <style>
+        .signup_form .form-inner {
+            margin-top: 10px !important;
+        }
+
+        #CaptchaInputText {
+            background-color: transparent;
+            border: 1px solid #e8ebec;
+            border-radius: 2px;
+            height: 40px;
+            padding: 0 20px;
+            line-height: 38px;
+            transition: all 300ms ease-in-out 0s;
+            width: 100%;
+        }
+
+        .auth_form {
+            height: auto !important;
+        }
+    </style>
+    @if (ViewBag.success != null)
+    {
+        <script type='text/javascript'>
+            $(document).ready(function () {
+                $('#dvThankyou').simplePopup({
+                    centerPopup: true,
+                    open: function () { },
+                    closed: function () { }
+                });
+            });
+        </script>
+    }
+    <div id="dvThankyou" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <div style="padding: 28% 0% 0 0%;"><span style="color:#FF8E52;font-weight:bold;font-size:25px;text-align: center;">Thank you for signing up with kalikoe.</span></div>
+    </div>
+
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:53:39 GMT -->
+</html>

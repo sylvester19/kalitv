@@ -1,0 +1,167 @@
+﻿@model Kalikoe.ViewModels.UsersViewModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    <link rel="stylesheet" href="css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+    
+    <section class="row" style="background-color:white;">
+            <div class="row media-grid content_video_posts">
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post, new {style="width:95%;", @class = "container-fluid signup_form auth_form" }))
+                {
+                <div class="form-inner row" style="margin-top:10px">
+                    <div class="form-header row m0">
+                        <h4>Sign In</h4>
+                    </div>
+                     @if (Request.QueryString["val"] != null)
+                    {
+                        if (Request.QueryString["val"] != "" && Request.QueryString["val"] == "false")
+                        {
+                            <div class="form-header row m0">
+                                <h4 style="color:red;">Invalid Credentials</h4>
+                            </div>
+                        }
+                    }
+                    <div class="form-body row m0">
+                        <span id="errcaptch" style="font-weight:bold;color:red;">@ViewBag.captchamsg</span>
+                        @Html.TextBoxFor(m => m.userVM.username, new { @class = "form-control", @placeholder = "User Name or Email Address", @required = "true" })
+                        @Html.PasswordFor(m => m.userVM.password, new { @class = "form-control", @placeholder = "Password", @required = "true" })
+                        @Html.Captcha("Refresh", "Enter the text shown in image", 7, "Is required field.", false)<br />
+                        <input type="checkbox" value="Remember me"  style="opacity:unset !important;pointer-events:all !important;" /><span style="padding-left:20px;">Remember me</span>
+                        <input type="submit" value="Login" class="btn btn-default form-control" style="width: 102%;"/>
+
+                    </div>
+                    <div class="row m0 text-left" style="padding-top:20px">
+                        <a href="/forgot-password">Forgot password? Click here.</a>
+                    </div>
+                    <div>
+                        <p style="font-weight:bold;align-content:center;padding-top:27px;margin-left:50%;">OR</p>
+                    </div>
+                    <div>
+                        @*@Html.ActionLink("Login with facebook", "Facebook", "Home")*@
+                        @*<a href="~/Home/Facebook"><img src="~/images/icons/loginfacebook.png" style="width:358px;height:82px;margin-left:-19px;" /></a>*@
+                        @*<a href="~/Home/LoginUsingGoogle"><img src="~/images/icons/logingoogle.png" style="width:358px;height:71px;margin-left:-19px;" /></a>*@
+                    </div>
+                   
+                    <div style="width:105%;">
+                        <div style="float: left;">
+                            <a href="~/Home/Facebook" class="fb btn" style="width: 96%;font-size: 75%;">
+                                <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+                            </a>
+                        </div>
+                        <div style="float: right;">
+                            <a href="~/Home/LoginUsingGoogle" class="google btn" style="width: 96%;font-size: 75%;">
+                                <i class="fa fa-google fa-fw">
+                                </i> Login with Google
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                    
+
+                }
+            </div>
+    </section>
+   
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+
+    <!--jQuery, Bootstrap and other vendor JS-->
+    <!--jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+    <!--Bootstrap JS-->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--jScroll-->
+    <script src="js/jquery.jscroll.min.js"></script>
+
+    <!--Magnific Popup-->
+    <script src="js/jquery.magnific-popup.min.js"></script>
+
+    <!--Bootstrap Select-->
+    <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+    <!--Theme JS-->
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        window.addEventListener("load", function () {
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000"
+                    },
+                    "button": {
+                        "background": "#670BB7"
+                    }
+                },
+                "content": {
+                    "href": "http://kali-tv/privacy-and-policy"
+                }
+            })
+        });
+    </script>
+   
+    <style>
+        #CaptchaInputText {
+            background-color: transparent;
+            border: 1px solid #e8ebec;
+            border-radius: 2px;
+            height: 40px;
+            padding: 0 20px;
+            line-height: 38px;
+            transition: all 300ms ease-in-out 0s;
+            width: 100%;
+        }
+
+        .auth_form {
+            height: auto !important;
+        }
+        .fb {
+            background-color: #3B5998;
+            color: white;
+        }
+        .google {
+            background-color: #dd4b39;
+            color: white;
+        }
+    </style>
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:53:39 GMT -->
+</html>

@@ -1,0 +1,168 @@
+﻿@model Kalikoe.ViewModels.VideoViewModel
+@{
+    Layout = "~/Views/Home/KalikoeMaster1.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kalikoe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+
+    <!--Bootstrap and Other Vendors-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-select/css/bootstrap-select.min.css" media="screen">
+
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--Theme Styles-->
+    <link rel="stylesheet" href="css/default/style.css">
+    <link rel="stylesheet" href="css/responsive/responsive.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="home">
+
+   
+
+<section class="row recent_uploads">
+    <div class="container">
+        <div class="row media-grid content_video_posts">
+            @if (Model.listVideosVM != null && Model.listVideosVM.Count > 0)
+            {
+                for (int i = 0; i <= Model.listVideosVM.Count - 1; i++)
+                {
+                    <article class="col-sm-3 video_post postType3">
+                        <div class="inner row m0">
+                            <a href="single-video.html">
+                                <div class="row screencast m0">
+                                    <iframe width="285" height="210" class="cast img-responsive"
+                                            src="@Model.listVideosVM[i].videourl"></iframe>
+                                    <div class="play_btn"></div>
+                                </div>
+                            </a>
+                            <div class="row m0 post_data">
+                                <div class="category"><a href="category.html"><img src="images/icons/catagory.png" alt="">@Model.listVideosVM[i].tags</a></div>
+                                <div class="row m0"><a href="single-video.html" class="post_title">@Model.listVideosVM[i].title</a></div>
+                                <div class="fleft date">Published: @Model.listVideosVM[i].publishedon</div>
+                                <div class="fright views"><a href="#"><img src="images/icons/views.png" alt=""></a></div>
+                            </div>
+                        </div>
+                    </article>
+                }
+            }
+            <div class="row m0">
+                <div class="clearfix"></div>
+                <a href="inc/more-uploads-1.html" class="load_more_videos">Load more videos</a>
+            </div>
+        </div>
+    </div>
+</section> <!--Recent Upload-->
+
+
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status">&nbsp;</div>
+</div>
+
+<!--jQuery, Bootstrap and other vendor JS-->
+<!--jQuery-->
+
+<!--Bootstrap JS-->
+<script src="js/bootstrap.min.js"></script>
+
+<!--Dropzone-->
+<script src="js/dropzone.html"></script>
+
+<!--jScroll-->
+<script src="js/jquery.jscroll.min.js"></script>
+
+<!--Magnific Popup-->
+<script src="js/jquery.magnific-popup.min.js"></script>
+
+<!--Bootstrap Select-->
+<script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+<!--Theme JS-->
+<script src="js/theme.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script src="/js/popup.js"></script>
+<div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+    <br />
+    <b>GET FREE KALI DOLLARS<br/>(limited time sticker)<br/>Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+    @if (Session["userid"] != null)
+    {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+</div>
+<script>
+    function fnPopRefer() {
+        $('#dvPopup').simplePopup({
+            centerPopup: true,
+            open: function () { },
+            closed: function () { }
+        });
+    }
+</script>
+
+<style>
+    .load-full-screen {
+        margin-top: -11px;
+    }
+
+    .simplePopup {
+        display: none;
+        position: fixed !important;
+        z-index: 3;
+        color: #fff;
+        padding: 8px;
+        width: 30%;
+        min-width: 30%;
+        padding: 3%;
+    }
+
+    .simplePopup1 {
+        display: none;
+        position: fixed !important;
+        z-index: 3;
+        color: #fff;
+        padding: 8px;
+        width: 45%;
+        min-width: 45%;
+        padding: 3%;
+        top: 20% !important;
+        border-radius: 10%;
+    }
+
+    .simplePopupClose {
+        float: right;
+        font-weight: bold;
+    }
+
+    .simplePopupBackground {
+        display: none;
+        background: #000;
+        position: fixed !important;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+</style>
+</body>
+<!-- Mirrored from uxart.io/downloads/metavideo-html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 24 Jan 2019 06:54:20 GMT -->
+</html>
