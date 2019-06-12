@@ -727,8 +727,9 @@ nav a.button-collapse i {
   line-height: 1px;
 }
 
-.banner_area img {
-  max-width: 100%;
+.banner_area iframe
+{
+  margin: 0 0 0 25%;
 }
 
 @media (min-width: 1850px) {
