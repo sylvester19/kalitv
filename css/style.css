@@ -725,7 +725,7 @@ nav a.button-collapse i {
 
 /* End Tranding-select Area */
 .banner_area {
-  background: #eff3f5;
+  background: linear-gradient(to top left, red, yellow);
   line-height: 1px;
 }
 
