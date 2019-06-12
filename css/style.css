@@ -2850,12 +2850,16 @@ nav a.button-collapse i {
   width: 300px;
 } */
 iframe,
-img,
 video {
   width: 435px;
   height: 265px;
 
 }
+.imageUploaded {
+  width: 435px !important;
+  height: 265px !important;
+}
+
 
 .notifications .notifications_content li .media.seen {
   background: #fff;
