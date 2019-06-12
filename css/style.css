@@ -4899,3 +4899,7 @@ font-family: 'Playfair Display', serif;
 }
 
 /*# sourceMappingURL=style.css.map */
+i.ion-chevron-right {
+    position: relative;
+    top: 17px;
+}
