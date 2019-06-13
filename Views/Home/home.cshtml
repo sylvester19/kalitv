@@ -73,7 +73,7 @@
 
                                         @if (Model.listVideosVM[i].uploadtype == "image")
                                         {
-                                            <img src="@Model.listVideosVM[i].videourl" style="width:304px;height:154px"></img>
+                                            <img src="@Model.listVideosVM[i].videourl" class="imageUploaded"></img>
                                         }
                                         else
                                         {
@@ -431,7 +431,18 @@
     </script>
     <script type="text/javascript">
         $(function () {
-                      $('#datetimepicker1').datetimepicker({                sideBySide: true            });            $('#datetimepicker1').data("DateTimePicker").minDate(new Date());            $("#datetimepicker1").on("dp.change", function (e) {                var oldDate = new Date(e.date);                var date = new Date(oldDate);                //date.setHours(oldDate.getHours() + 1);                $('#datetimepicker1').data("DateTimePicker").minDate(date);            });   
+          
+            $('#datetimepicker1').datetimepicker({
+                sideBySide: true
+            });
+            $('#datetimepicker1').data("DateTimePicker").minDate(new Date());
+            $("#datetimepicker1").on("dp.change", function (e) {
+                var oldDate = new Date(e.date);
+                var date = new Date(oldDate);
+                //date.setHours(oldDate.getHours() + 1);
+                $('#datetimepicker1').data("DateTimePicker").minDate(date);
+            });   
+
             videolist();
         });
     </script>
