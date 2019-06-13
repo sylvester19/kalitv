@@ -729,6 +729,9 @@ nav a.button-collapse i {
   line-height: 1px;
 }
 
+.banner_area {
+    display: flex;
+}
 .banner_area video
 {
   margin:0;
