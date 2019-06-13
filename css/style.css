@@ -4906,3 +4906,10 @@ i.ion-chevron-right {
     position: relative;
     top: 17px;
 }
+
+ul.collapsible.trending_collaps {
+    /* display: inline; */
+    display: flex;
+}
+
+.trending_area li {padding: 15px;}
