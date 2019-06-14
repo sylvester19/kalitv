@@ -1338,6 +1338,7 @@ nav a.button-collapse i {
 }
 
 .min_container .section_row .right_side_bar {
+	  position: sticky !important;
   order: 3;
   max-width: 250px;
   margin-top: 15px;
@@ -1345,6 +1346,7 @@ nav a.button-collapse i {
 }
 
 .min_container .section_row .right_side_bar .right_sidebar_iner {
+position: sticky !important;
   padding: 30px;
   background: #fff;
   border-radius: 4px;
