@@ -4003,7 +4003,7 @@ font-family: 'Playfair Display', serif;
 }
 
 .footer_area .footer_row {
-  padding: 100px 0px 60px;
+  padding: 30px 0px 0 15%;
   width: 1590px;
   margin: 0 auto;
   margin-bottom: 0;
@@ -4915,5 +4915,15 @@ ul.collapsible.trending_collaps {
 .trending_area li {padding: 15px;}
 
 .collapsible a {
+    color: whitesmoke;
+}
+
+.copyright {
+    color: white !important;
+    position: relative;
+    left: 45%;
+}
+
+.copyright a {
     color: whitesmoke;
 }
