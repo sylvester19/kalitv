@@ -105,7 +105,6 @@ a,
 button {
   outline: none;
   transition: all 300ms linear 0s;
-color: whitesmoke !important;
 }
 
 a:before,
