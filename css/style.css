@@ -976,6 +976,7 @@ nav a.button-collapse i {
 }
 
 .min_container .section_row .left_side_bar {
+  position: sticky !important;
   border-radius: 4px;
   background-color: white;
   box-shadow: 0px 0px 30px 0px rgba(0, 36, 90, 0.1);
