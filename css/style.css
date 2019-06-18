@@ -977,6 +977,7 @@ nav a.button-collapse i {
 
 .min_container .section_row .left_side_bar {
   position: sticky !important;
+  top: 1%;
   border-radius: 4px;
   background-color: white;
   box-shadow: 0px 0px 30px 0px rgba(0, 36, 90, 0.1);
@@ -1347,6 +1348,7 @@ nav a.button-collapse i {
 
 .min_container .section_row .right_side_bar .right_sidebar_iner {
 position: sticky !important;
+	top:1%;
   padding: 30px;
   background: #fff;
   border-radius: 4px;
