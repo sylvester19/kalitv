@@ -1379,6 +1379,8 @@ position: sticky !important;
 .min_container .section_row .right_side_bar .right_sidebar_iner .popular_posts .popular_item {
   padding-top: 20px;
   margin-bottom: 7px;
+  padding-bottom: 20px;
+  border-bottom: 0.5px solid rgba(200,200,200,1);
 }
 
 .min_container .section_row .right_side_bar .right_sidebar_iner .popular_posts .popular_item .p_img {
