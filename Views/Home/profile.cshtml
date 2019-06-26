@@ -33,10 +33,11 @@
 
 </head>
 <body class="home">
-   
-    <div id="dvPopup" class="simplePopup1" style="background-color:#EFf3e1;left:0px !important;color:black; visibility:hidden;">
-        <br /><b>Get free Kali Dollars (limited time sticker) </b><br />Invite your friends with this custom link and you will earn KDC for every user that signs up<br />
-            @if(Session["userid"] != null){<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
+
+    <div id="dvPopup" class="simplePopup1" style="background-color:white;left:0px !important;color:black !important;overflow: scroll;height:60%;">
+        <br /><b>GET FREE KALI DOLLARS<br />(limited time sticker)<br />Invite your friends with this custom link and you will earn KDC for every user that signs up</b><br />
+        @if (Session["userid"] != null)
+        {<textarea cols="70" rows="4">http://kali-tv/signup?refer=@Session["encemailaddress"].ToString()</textarea>}
     </div>
     <script>
         function fnPopRefer() {
@@ -96,49 +97,50 @@
 
     <script src="/js/popup.js"></script>
     <section class="row" style="background-color:white;">
-            <div class="row media-grid content_video_posts">
-                @using (Html.BeginForm("Profiles", "Home", FormMethod.Post, new { style="width:94%",enctype = "multipart/form-data", @class = "container-fluid signup_form auth_form" }))
-                {
-                    <div class="form-inner row">
-                        <div class="form-header row m0">
-                            <h3>My Profile</h3><br />
-                        </div>
-                        @if (Request.QueryString["msg"] != null)
-                        {
-                            <div class="row text-center">
-                                <span style="color:red;font-size:14px;font-weight:bold;">Successfully Updated</span>
-                            </div>
-                        }
-                            <div class="form-body row m0">
-                                <h4 style="color:#4aa3df;"> Total Earnings : @ViewBag.kalidollar KDC</h4><br />
-                                <img src="@Model.userVM.userlogo" width="150" /><br /><br /><b>Profile Image(560 x 560)</b>
-                                <input type="file" name="file1" id="file1" /> <b>First Name</b><br />
-                                @Html.TextBoxFor(m => m.userVM.firstname, new { @class = "form-control", @required = "true" }) <b>Last Name</b>
-                                @Html.TextBoxFor(m => m.userVM.lastname, new { @class = "form-control", @required = "true" }) <b>Email</b>
-                                @Html.TextBoxFor(m => m.userVM.emailaddress, new { @class = "form-control", @type = "email", @required = "true" }) <b>Mobile No</b>
-                                @Html.TextBoxFor(m => m.userVM.mobileno, new { @class = "form-control", @required = "true" })<br />  <b>Gender</b><br />
-                                <select name="gender" style="display:block;width:250px;" id="gender" class = "form-control">
-                                    <option value="">Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select> <br />  <b>Date Of Birth</b>
-                                @Html.TextBoxFor(m => m.userVM.dob, new { @class = "form-control", @required = "true", @type = "date" })<br />  <b>Country</b>
-                                @Html.DropDownListFor(m => m.userVM.country,  new SelectList(Model.countrylistVM,"code","name"), new { @class = "form-control", @required = "true" })<br />  <b>State</b>
-                                @Html.TextBoxFor(m => m.userVM.state, new { @class = "form-control", @required = "true" })<br />  <b>Post Code</b>
-                                @Html.TextBoxFor(m => m.userVM.postcode, new { @class = "form-control", @required = "true" })<br />  <b>About me</b>
-                                @Html.TextAreaFor(m => m.userVM.aboutme, new { @placeholder = "", @style = "border-color:#E8EBEC;", @name = "aboutme", @cols = "49", @rows = "10" })
-                                @Html.HiddenFor(m => m.userVM.userlogo)
-
-                                <input type="submit" value="Update" class="btn btn-default form-control">
-                            </div>
-                        <div class="form-footer row m0">
-                            <a href="/" class="mfp-close">Close (Esc)</a>
-                        </div>
+        <div class="row media-grid content_video_posts">
+            @using (Html.BeginForm("Profiles", "Home", FormMethod.Post, new { style = "width:94%", enctype = "multipart/form-data", @class = "container-fluid signup_form auth_form" }))
+            {
+                <div class="form-inner row">
+                    <div class="form-header row m0">
+                        <h3>My Profile</h3><br />
                     </div>
-                }
-            </div>
+                    @if (Request.QueryString["msg"] != null)
+                    {
+                        <div class="row text-center">
+                            <span style="color:red;font-size:14px;font-weight:bold;">Successfully Updated</span>
+                        </div>
+                    }
+                    <div class="form-body row m0">
+                        <h4 style="color:#4aa3df;"> Total Earnings : @ViewBag.kalidollar KDC</h4><br />
+                        <img src="@Model.userVM.userlogo" width="150" /><br /><br /><b>Profile Image(560 x 560)</b>
+                        <input type="file" name="file1" id="file1" /> <b>First Name</b><br />
+                        @Html.TextBoxFor(m => m.userVM.firstname, new { @class = "form-control", @required = "true" }) <b>Last Name</b>
+                        @Html.TextBoxFor(m => m.userVM.lastname, new { @class = "form-control", @required = "true" }) <b>Email</b>
+                        @Html.TextBoxFor(m => m.userVM.emailaddress, new { @class = "form-control", @type = "email", @required = "true" }) <b>Mobile No</b>
+                        @Html.TextBoxFor(m => m.userVM.mobileno, new { @class = "form-control", @required = "true" })<br />  <b>Gender</b><br />
+                        @*<select name="gender" style="display:block;width:250px;" id="gender" class = "form-control">
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select> <br />  <b>Date Of Birth</b>*@
+                        @Html.DropDownListFor(m => m.userVM.gender, new SelectList(Model.genderlistVM, "GID", "gender"), new { @class = "form-control", @required = "true" })<br /> <b>Date Of Birth</b>
+                        @Html.TextBoxFor(m => m.userVM.dob, new { @class = "form-control", @required = "true", @type = "date" })<br />  <b>Country</b>
+                        @Html.DropDownListFor(m => m.userVM.country, new SelectList(Model.countrylistVM, "code", "name"), new { @class = "form-control", @required = "true" })<br />  <b>State</b>
+                        @Html.TextBoxFor(m => m.userVM.state, new { @class = "form-control", @required = "true" })<br />  <b>Post Code</b>
+                        @Html.TextBoxFor(m => m.userVM.postcode, new { @class = "form-control", @required = "true" })<br />  <b>About me</b>
+                        @Html.TextAreaFor(m => m.userVM.aboutme, new { @placeholder = "", @style = "border-color:#E8EBEC;", @name = "aboutme", @cols = "49", @rows = "10" })
+                        @Html.HiddenFor(m => m.userVM.userlogo)
+
+                        <input type="submit" value="Update" class="btn btn-default form-control">
+                    </div>
+                    <div class="form-footer row m0">
+                        <a href="/" class="mfp-close">Close (Esc)</a>
+                    </div>
+                </div>
+            }
+        </div>
     </section>
-    
+
     <!-- Preloader -->
     <div id="preloader">
         <div id="status">&nbsp;</div>
@@ -190,9 +192,10 @@
         .auth_form {
             height: auto !important;
         }
-        textarea{
-            height:auto;
-            width:auto;
+
+        textarea {
+            height: auto;
+            width: auto;
         }
     </style>
 </body>
