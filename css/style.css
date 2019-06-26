@@ -4753,9 +4753,6 @@ font-family: 'Playfair Display', serif;
 }
 
 @media (max-width: 575px) {
-  nav .brand-logo {
-    left: 35%;
-  }
 
   .tranding_select li a {
     margin-bottom: 3px;
