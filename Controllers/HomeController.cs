@@ -1,20 +1,18 @@
-﻿using Kalikoe.ViewModels;
+﻿using CaptchaMvc.HtmlHelpers;
+using Facebook;
+using Kalikoe.ViewModels;
 using Kalikoe_BAL;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
+using System.Drawing;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using CaptchaMvc.HtmlHelpers;
-using Facebook;
 using System.Web.Security;
-using System.Threading.Tasks;
-using System.Net.Http;
-using Newtonsoft.Json;
-using static System.Net.Mime.MediaTypeNames;
-using System.Drawing;
 
 namespace Kalikoe.Controllers
 {
@@ -29,17 +27,27 @@ namespace Kalikoe.Controllers
         public ActionResult Index()
         {
             HomeViewModel videoVM = new HomeViewModel();
+            string strUserId = "0";
+            if (Session["userid"] != null)
+            {
+                strUserId = Session["userid"].ToString();
+            }
             if (Request.QueryString["tagname"] != null)
             {
-                videoVM.listVideosVM = objVideo.GetTagVideos(Request.QueryString["tagname"].ToString());
+                videoVM.listVideosVM = objVideo.GetTagVideos(Request.QueryString["tagname"].ToString(), strUserId);
             }
             else if (Request.QueryString["searchvalue"] != null)
             {
-                videoVM.listVideosVM = objVideo.GetSearchVideos(Request.QueryString["searchvalue"].ToString());
+                videoVM.listVideosVM = objVideo.GetSearchVideos(Request.QueryString["searchvalue"].ToString(), strUserId);
             }
             else
             {
-                videoVM.listVideosVM = objVideo.GetAllUserVideos();
+
+                if (Session["userid"] != null)
+                {
+                    strUserId = Session["userid"].ToString();
+                }
+                videoVM.listVideosVM = objVideo.GetAllUserVideos(strUserId);
             }
             videoVM.strSponsor = objVideo.GetSponsorVideo();
             videoVM.listTagsVM = objVideo.GetTagList();
@@ -174,7 +182,7 @@ namespace Kalikoe.Controllers
                 userVM.userlogo = strImgPath;
             }
             userVM.aboutme = Request.Form["userVM.aboutme"].ToString();
-            userVM.gender = Request.Form["gender"].ToString();
+           // userVM.gender = Request.Form["gender"].ToString();
             userVM.userid = Session["userid"].ToString();
             string strRet = objUsr.ProfileUpdate(userVM);
             Session["displayname"] = userVM.firstname + " " + userVM.lastname;
@@ -193,8 +201,9 @@ namespace Kalikoe.Controllers
             if (Session["userid"] != null)
             {
                 UsersViewModel usrVM = new UsersViewModel();
-                usrVM.userVM = objUsr.ProfileDisplay(Session["userid"].ToString());
                 usrVM.countrylistVM = objUsr.GetCountry();
+                usrVM.genderlistVM = objUsr.GetGender();
+                usrVM.userVM = objUsr.ProfileDisplay(Session["userid"].ToString());
                 ViewBag.kalidollar = objUsr.ProfileDollar(Session["userid"].ToString());
 
                 return View("profile", usrVM);
@@ -257,6 +266,13 @@ namespace Kalikoe.Controllers
                 ViewBag.captchamsg = "Invalid Captcha";
                 return View("login");
             }
+        }
+
+        [HttpPost]
+        public ActionResult passwordupdate(Users userVM)
+        {
+            string strRet = objUsr.updatepassword(userVM.userid, userVM.password);
+            return Redirect("/login");
         }
         public ActionResult SignUp()
         {
@@ -370,10 +386,20 @@ namespace Kalikoe.Controllers
                 return uriBuilder.Uri;
             }
         }
+        private Uri RediredtUri1
+        {
+            get
+            {
+                var uriBuilder = new UriBuilder(Request.Url);
+                uriBuilder.Query = null;
+                uriBuilder.Fragment = null;
+                uriBuilder.Path = Url.Action("FacebookSignCallback");
+                return uriBuilder.Uri;
+            }
+        }
 
         [AllowAnonymous]
         public ActionResult Facebook()
-
         {
             var fb = new FacebookClient();
             var loginUrl = fb.GetLoginUrl(new
@@ -381,6 +407,21 @@ namespace Kalikoe.Controllers
                 client_id = "388494591743514",
                 client_secret = "300d7cf149dd54ee51bbc8d46d63a00f",
                 redirect_uri = RediredtUri.AbsoluteUri,
+                response_type = "code",
+                scope = "email"
+            });
+            return Redirect(loginUrl.AbsoluteUri);
+        }
+
+        [AllowAnonymous]
+        public ActionResult FacebookSignUp()
+        {
+            var fb = new FacebookClient();
+            var loginUrl = fb.GetLoginUrl(new
+            {
+                client_id = "399027980938795",
+                client_secret = "f34a6e726701849f9db49eb2f4969ece",
+                redirect_uri = RediredtUri1.AbsoluteUri,
                 response_type = "code",
                 scope = "email"
             });
@@ -411,15 +452,53 @@ namespace Kalikoe.Controllers
             return Redirect("/dashboard?type=first");
         }
 
+        public ActionResult FacebookSignCallback(string code)
+        {
+            var fb = new FacebookClient();
+            dynamic result = fb.Post("oauth/access_token", new
+            {
+                client_id = "399027980938795",
+                client_secret = "f34a6e726701849f9db49eb2f4969ece",
+                redirect_uri = RediredtUri1.AbsoluteUri,
+                code = code
+            });
+            var accessToken = result.access_token;
+            fb.AccessToken = accessToken;
+            dynamic obj = fb.Get("me?fields=link,first_name,currency,last_name,email,gender,locale,timezone,verified,picture,age_range");
+            string email = obj.email;
+            var ds = objUsr.Signup_Google_FB_UserInsert(obj.email, obj.first_name, obj.last_name, obj.first_name + " " + obj.last_name, obj.id, obj.gender);
+            FormsAuthentication.SetAuthCookie(email, false);
+            ViewBag.userid = ds.Tables[0].Rows[0]["userid"].ToString();
+            if (ds.Tables[0].Rows[0]["type"].ToString() == "new")
+            {
+                return View("signuppassword");
+            }
+            else
+            {
+                return Redirect("/login");
+            }
+        }
+
+
         //google login
 
         private string ClientId = ConfigurationManager.AppSettings["Google.ClientID"];
         private string SecretKey = ConfigurationManager.AppSettings["Google.SecretKey"];
         private string RedirectUrl = ConfigurationManager.AppSettings["Google.RedirectUrl"];
 
+        private string ClientId1 = ConfigurationManager.AppSettings["Google.ClientID1"];
+        private string SecretKey1 = ConfigurationManager.AppSettings["Google.SecretKey1"];
+        private string RedirectUrl1 = ConfigurationManager.AppSettings["Google.RedirectUrl1"];
+
         public void LoginUsingGoogle()
         {
             Response.Redirect($"https://accounts.google.com/o/oauth2/v2/auth?client_id={ClientId}&response_type=code&scope=openid%20email%20profile&redirect_uri={RedirectUrl}&state=abcdef");
+        }
+
+        public void SignupUsingGoogle()
+        {
+
+            Response.Redirect($"https://accounts.google.com/o/oauth2/v2/auth?client_id={ClientId1}&response_type=code&scope=openid%20email%20profile&redirect_uri={RedirectUrl1}&state=abcdef");
         }
 
         [HttpGet]
@@ -471,6 +550,42 @@ namespace Kalikoe.Controllers
             //return View("UserProfile", obj);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> SignupGoogleUser(string code, string state, string session_state)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return View("Error");
+            }
+
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.googleapis.com")
+            };
+            var requestUrl = $"oauth2/v4/token?code={code}&client_id={ClientId1}&client_secret={SecretKey1}&redirect_uri={RedirectUrl1}&grant_type=authorization_code";
+
+            var dict = new Dictionary<string, string>
+            {
+                { "Content-Type", "application/x-www-form-urlencoded" }
+            };
+            var req = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, requestUrl) { Content = new FormUrlEncodedContent(dict) };
+            var response = await httpClient.SendAsync(req);
+            var token = JsonConvert.DeserializeObject<GmailToken>(await response.Content.ReadAsStringAsync());
+            var obj = await GetuserProfile(token.AccessToken);
+            var sd = obj.Email;
+            var ds = objUsr.Signup_Google_FB_UserInsert(obj.Email, obj.GivenName, obj.FamilyName, obj.Name, obj.Id, obj.Gender);
+            ViewBag.userid = ds.Tables[0].Rows[0]["userid"].ToString();
+            if (ds.Tables[0].Rows[0]["type"].ToString() == "new")
+            {
+                return View("signuppassword");
+            }
+            else
+            {
+                return Redirect("/login");
+            }
+
+        }
+
         /// <summary>  
         /// To fetch User Profile by access token  
         /// </summary>  
@@ -486,6 +601,7 @@ namespace Kalikoe.Controllers
             var response = await httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<UserProfile>(await response.Content.ReadAsStringAsync());
         }
+
         public ActionResult KalikoeMaster()
         {
             HomeViewModel videoVM = new HomeViewModel();
@@ -501,6 +617,7 @@ namespace Kalikoe.Controllers
             videoVM.listTagsVM = objVideo.GetTagList();
             return View("KalikoeMaster", videoVM);
         }
+
         public ActionResult _LeftPanel()
         {
             HomeViewModel videoVM = new HomeViewModel();
@@ -518,6 +635,7 @@ namespace Kalikoe.Controllers
             videoVM.bloglistVM = objBlog.recentbloglist();
             return View("_LeftPanel", videoVM);
         }
+
         public ActionResult _RightPanel()
         {
             HomeViewModel videoVM = new HomeViewModel();

@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace Kalikoe.Controllers
 {
-   
+
     public class VideoController : Controller
     {
         CRUDVideos objCRUD = new CRUDVideos();
@@ -72,7 +72,7 @@ namespace Kalikoe.Controllers
                 {
                     videoVM.description = "";
                 }
-               
+
                 if (file1 != null)
                 {
                     string strPath = "";
@@ -91,7 +91,7 @@ namespace Kalikoe.Controllers
                     strPath = strPath + pic;
                     file1.SaveAs(ConfigurationManager.AppSettings["websitefolderpath"] + strPath);
                     videoVM.videourl = strPath;
-                   
+
                 }
                 videoVM.uploadtype = strUploadType;
                 videoVM.userid = Session["userid"].ToString();
@@ -103,7 +103,7 @@ namespace Kalikoe.Controllers
             {
                 return Redirect("/login");
             }
-          
+
         }
 
         public ActionResult VideoList()
@@ -150,7 +150,7 @@ namespace Kalikoe.Controllers
                 seo = objCRUD.GetSeoDetails("3");
                 ViewBag.pagetitle = seo.pagetitle;
                 ViewBag.metadesc = seo.pagedescription;
-                return View("dashboard" , videoVM);
+                return View("dashboard", videoVM);
             }
             else
             {
@@ -183,29 +183,42 @@ namespace Kalikoe.Controllers
 
         [HttpPost]
         public JsonResult challengeUpdate(challengestatus chVM)
-        {          
-             string strRet = objCRUD.UpdateChallengeStatus(chVM.challengeid,chVM.status);
-             return Json("N", JsonRequestBehavior.AllowGet);
+        {
+            string strRet = objCRUD.UpdateChallengeStatus(chVM.challengeid, chVM.status);
+            return Json("N", JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Sponsor(Sponsor spVM)
         {
-
-            spVM.vid = Request.Form["hdnkali"];
-            spVM.kaliamount = Request.Form["hdnkaliamt"];
-            string strRet = objCRUD.Sponsor(spVM);
-            return Redirect(this.Request.UrlReferrer.PathAndQuery + "#category");
+            if (Session["userid"] != null)
+            {
+                spVM.vid = Request.Form["hdnkali"];
+                spVM.kaliamount = Request.Form["hdnkaliamt"];
+                string strRet = objCRUD.Sponsor(spVM);
+                return Redirect(this.Request.UrlReferrer.PathAndQuery + "#category");
+            }
+            else
+            {
+                return Redirect("/login");
+            }
         }
         public ActionResult fnRateIt(RateIt rtVM)
         {
-            rtVM.vid = Request.Form["hdnvid"];
-            rtVM.rating = Request.Form["hdnrating"];
-            rtVM.userid = Session["userid"].ToString();
-            string strRet = objCRUD.InsertRateIt(rtVM.userid,rtVM.vid,rtVM.rating);
-            return Redirect(this.Request.UrlReferrer.PathAndQuery + "#category");
+            if (Session["userid"] != null)
+            {
+                rtVM.vid = Request.Form["hdnvid"];
+                rtVM.rating = Request.Form["hdnrating"];
+                rtVM.userid = Session["userid"].ToString();
+                string strRet = objCRUD.InsertRateIt(rtVM.userid, rtVM.vid, rtVM.rating);
+                return Redirect(this.Request.UrlReferrer.PathAndQuery + "#category");
+            }
+            else
+            {
+                return Redirect("/login");
+            }
         }
         public ActionResult Comment()
-        {           
+        {
             string strRet = objCRUD.InsertComments(Request.Form["txtComment"], Request.Form["hdnvid"], Session["userid"].ToString());
             string s1 = this.Request.UrlReferrer.PathAndQuery;
             string s2 = Request.Path.ToString();
@@ -215,7 +228,12 @@ namespace Kalikoe.Controllers
         {
             string strVid = id.Split('-').Last();
             VideoViewModel videoVM = new VideoViewModel();
-            videoVM.videoVM = objCRUD.VideoDetails(strVid);
+            string strUserId = "0";
+            if (Session["userid"] != null)
+            {
+                strUserId = Session["userid"].ToString();
+            }
+            videoVM.videoVM = objCRUD.VideoDetails(strVid, strUserId);
             videoVM.commentVM = objCRUD.GetComments(strVid);
             ViewBag.vid = strVid;
             ViewBag.pagetitle = videoVM.videoVM.displayname;
@@ -238,7 +256,7 @@ namespace Kalikoe.Controllers
             {
                 return Redirect("/login");
             }
-            
+
         }
         public ActionResult MyChallengeList()
         {
@@ -301,7 +319,7 @@ namespace Kalikoe.Controllers
                 chVM.userid1 = "0";
                 chVM.userid2 = Session["userid"].ToString();
                 chVM.videoid1 = Request.Form["hdnvid2"].ToString();
-                if (Request.Form["ddlvideolist"] !=null & Request.Form["ddlvideolist"] != "0")
+                if (Request.Form["ddlvideolist"] != null & Request.Form["ddlvideolist"] != "0")
                 {
                     chVM.videoid2 = Request.Form["ddlvideolist"].ToString();
                 }
